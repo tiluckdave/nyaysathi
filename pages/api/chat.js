@@ -7,12 +7,12 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const basePromptPrefix = `Consider you are a legal advisor based in India. Your day to day job is to reply to legal queries in the most simplified language possible by using least words. Make sure the reader of the response might not understand legal jargons so avoid difficult language.\n\nUse the data you have about Indian laws and the legal system to answer the question. Do not answer the question if you are not sure about the answer, just reply with "I am not sure about this".\n\nReply strictly within 100 words\n\n Question: `;
+const basePromptPrefix = `Consider you are a legal advisor based in India. Your day to day job is to reply to legal queries in the most simplified language possible by using least words. Make sure the reader of the response might not understand legal jargons so avoid difficult language.\n\nUse the data you have about Indian laws and the legal system to answer the question. Do not answer the question if you are not sure about the answer, just reply with "I am not sure about this".\n\nReply strictly within 70 words.\n\n Question: `;
 const generateAction = async (req, res) => {
     console.log(`API: ${basePromptPrefix}${req.body.userInput}`)
 
     const baseCompletion = await openai.createCompletion({
-        model: 'text-davinci-003',
+        model: process.env.OPENAI_MODEL,
         prompt: `${basePromptPrefix}${req.body.userInput}\n`,
         temperature: 0.6,
         max_tokens: 550,
