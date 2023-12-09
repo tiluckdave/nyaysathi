@@ -13,7 +13,7 @@ export default function FileSummarize() {
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch("http://localhost:5000/summarize", {
+        fetch("https://nyaysathi.replit.app/summarize", {
             method: "POST",
             body: formData,
         })
