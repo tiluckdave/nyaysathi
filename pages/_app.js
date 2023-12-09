@@ -1,5 +1,7 @@
+import { AuthContextProvider } from '@/lib/auth'
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
+
 
 const colors = {
   brand: {
@@ -13,8 +15,10 @@ export const theme = extendTheme({ colors })
 
 export default function App({ Component, pageProps }) {
   return (
+    <AuthContextProvider>
       <ChakraProvider>
         <Component {...pageProps} />
       </ChakraProvider>
+    </AuthContextProvider>
   )
 }

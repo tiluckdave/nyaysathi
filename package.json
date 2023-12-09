@@ -6,11 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate",
-    "studio": "npx prisma studio",
-    "generate": "npx prisma generate",
-    "db push": "npx prisma db push"
+    "lint": "next lint"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.1.5",
@@ -19,6 +15,7 @@
     "@emotion/styled": "^11.11.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
+    "firebase": "^10.7.1",
     "framer-motion": "^10.16.4",
     "next": "13.5.1",
     "react": "18.2.0",
