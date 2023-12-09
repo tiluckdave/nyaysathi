@@ -6,25 +6,40 @@ export default function Chat() {
     const [ apiOutput, setApiOutput ] = useState('')
     const [ isGenerating, setIsGenerating ] = useState(false)
 
-    const callGenerateEndpoint = async () => {
-        setIsGenerating(true);
-
-        console.log("Calling OpenAI...")
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userInput }),
-        });
-
-        const data = await response.json();
-        const { output } = data;
-        console.log("OpenAI replied...", output.text)
-
-        setApiOutput(`${output.text}`);
-        setIsGenerating(false);
-    }
+    const callGenerateEndpoint = () => {
+        setIsGenerating(true)
+        const endpoint = 'https://nyaysathi.replit.app/ask'; // Replace with your actual endpoint URL
+        const requestData = {
+          question: userInput
+        };
+      
+        return fetch(endpoint, {
+          method: 'POST', // or 'GET' depending on your API
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any other headers if required
+          },
+          body: JSON.stringify(requestData),
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Error: ${response.status} - ${response.statusText}`);
+            }
+            return response.json();
+          })
+          .then(responseData => {
+            // Process the responseData as needed
+            console.log(responseData);
+            setApiOutput(responseData.answer)
+            setIsGenerating(false)
+          })
+          .catch(error => { 
+            console.error('Error:', error.message);
+            // Handle the error
+          });
+          
+      };
+      
 
     const onUserChangedText = (event) => {
         console.log(event.target.value);
