@@ -9,34 +9,17 @@ export default function News() {
     const [ page, setPage ] = useState(1);
 
     useEffect(() => {
-        const fetchNews = async () => {
-            try {
-                const response = await axios.get(
-                    'https://newsapi.org/v2/everything', // Replace with the actual News API endpoint
-                    {
-                        params: {
-                            q: 'court',
-                            sources: 'google-news-in,the-hindu,the-times-of-india',
-                            language: 'en',
-                            sortBy: 'relevancy',
-                            page: page,
-                            pageSize: 21,
-                            apiKey: process.env.NEXT_PUBLIC_NEWS_API_KEY, // Replace with your News API key
-                        },
-                    }
-                );
+        function fetchData() {
+            axios.get(`https://cors-anywhere.herokuapp.com/https://gnews.io/api/v4/search/?q=court&sources=google-news-in,the-hindu,the-times-of-india&language=en&country=in&sortBy=relevance&page=${page}&apikey=5df47c351514a303ef0b60e7516f9bf6`)
+                .then((response) => {
+                    setNews(response.data.articles);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
 
-                setNews(response.data.articles);
-            } catch (error) {
-                console.error('Error fetching news:', error);
-            }
-        };
-
-        // scroll  to id #heading
-        const element = document.getElementById("heading");
-        element.scrollIntoView({ behavior: "smooth" });
-
-        fetchNews();
+        fetchData();
     }, [ page ]);
 
 
@@ -49,7 +32,7 @@ export default function News() {
                         <Card key={article.title} maxW='sm'>
                             <CardBody>
                                 <Image
-                                    src={article.urlToImage}
+                                    src={article.image}
                                     alt={article.title}
                                     borderRadius='lg'
                                 />
