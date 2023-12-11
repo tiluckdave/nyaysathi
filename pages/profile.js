@@ -17,7 +17,7 @@ export default function Profile({ challenge }) {
     const [ support, setSupport ] = useState(false);
     const [ error, setError ] = useState(null);
 
-    const handleRegister = async (event) => {
+    const handleRegister = (event) => {
         event.preventDefault();
 
         const cred = create({
@@ -45,7 +45,7 @@ export default function Profile({ challenge }) {
        
 
 
-        const res = await fetch("/api/register", {
+        const res = fetch("/api/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export default function Profile({ challenge }) {
         });
 
         if (!res.ok) {
-            setError(await res.text());
+            setError(res.text());
             return;
         }
     };
