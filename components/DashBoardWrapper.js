@@ -11,12 +11,13 @@ export default function DashBoardWrapper({ children, page }) {
     const dashboard = page === "dashboard" ? true : false;
     const file = page === "file" ? true : false
     const news = page === "news" ? true : false
+    const aid = page === "aid" ? true : false
 
     return (
         <Flex
             flexDirection={{ base: "column-reverse", lg: "row" }}
             minHeight="100vh"
-            
+
         >
             <Flex zIndex={10} width={{ base: "100%", lg: "250px" }} backgroundColor="gray.100" flexDirection={{ base: "row", lg: "column" }} justifyContent={{ base: "center", lg: "space-between" }} padding={{ base: 2, lg: 6 }} gap={4} minHeight={{ base: "10px", lg: "100vh" }} position={"fixed"} bottom={0}>
                 <Flex flexDirection={{ base: "row", lg: "column" }} gap={4}>
@@ -36,10 +37,12 @@ export default function DashBoardWrapper({ children, page }) {
                             <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Case Summarize</Text>
                         </Button>
                     </Link>
-                    <Button colorScheme='gray' padding={{ base: 4, lg: 2 }} rounded={4} alignItems={"center"} justifyContent="flex-start" >
-                        <Icon boxSize={5} as={RiContactsBookLine} />
-                        <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Aid Directory</Text>
-                    </Button>
+                    <Link href="/aid-directory" width="100%">
+                        <Button colorScheme='gray' bg={aid && "gray.200"} padding={{ base: 4, lg: 2 }} rounded={4} alignItems={"center"} justifyContent="flex-start" width={"100%"}> 
+                            <Icon boxSize={5} as={RiContactsBookLine} />
+                            <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Aid Directory</Text>
+                        </Button>
+                    </Link>
                     <Link href="/news" width="100%">
                         <Button colorScheme='gray' bg={news && "gray.200"} padding={{ base: 4, lg: 2 }} rounded={4} alignItems={"center"} justifyContent="flex-start" width={"100%"}>
                             <Icon boxSize={5} as={LuNewspaper} />
