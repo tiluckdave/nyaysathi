@@ -10,7 +10,7 @@ async function handler(request, response) {
         await request.session.save();
         response.status(200).json({ userId: request.body.id });
     } catch (error) {
-        response.status(500).json({ message: error });
+        response.status(500).json({ message: error.message, cred: credentialID, pubKey: publicKey  });
     }
 }
 
