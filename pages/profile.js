@@ -45,18 +45,21 @@ export default function Profile({ challenge }) {
        
 
 
-        const res = fetch("/api/register", {
+        fetch("/api/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ id: user.uid, name: user.email, displayName: user.displayName, cred }),
-        });
-
-        if (!res.ok) {
-            setError(res.text());
-            return;
-        }
+        }).then((response) => response.json())
+        .then((data) => {
+                if (data.userId) {
+                    router.push("/dashboard");
+                } else {
+                    setError(data.message);
+                }
+            }
+            );
     };
 
     useEffect(() => {
