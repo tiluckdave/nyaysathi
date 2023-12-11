@@ -113,6 +113,7 @@ export default function Login({challenge}) {
                         <Heading fontSize={"3xl"} textAlign={"center"}>
                             Login
                         </Heading>
+                        {error && <Text color={"red.500"}>{error}</Text>}
                     </Stack>
                     <Input placeholder="Enter Your Email" value={email} onChange={(e) => setEmail(e.target.value)} width={"100%"} />
                     <Button onClick={handleEmailSignIn} colorScheme={"yellow"} size='md' width={"100%"} >
