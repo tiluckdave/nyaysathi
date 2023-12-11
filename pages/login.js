@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { RiTwitterXFill } from "react-icons/ri";
-import { supported, create } from "@github/webauthn-json";
+import { supported, create, get } from "@github/webauthn-json";
 import { PiFingerprintSimpleBold } from "react-icons/pi";
 
-import { sessionOptions } from "../lib/session";
+import { sessionOptions, withSessionSSR } from "../lib/session";
 
 import { UserAuth } from "@/lib/auth";
 import { useRouter } from "next/router";
@@ -12,13 +12,57 @@ import { Button, Divider, Flex, FormControl, FormLabel, Input, Stack, Text, Imag
 import { generateChallenge } from "@/lib/utils";
 
 
-export default function Login() {
+export default function Login({challenge}) {
     const router = useRouter();
     const [ email, setEmail ] = useState("");
     const { user, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn } = UserAuth();
+    const [ error, setError ] = useState("");
+    const [ support, setSupport ] = useState(false);
+
+    useEffect(() => {
+        const checkAvailability = async () => {
+            const available =
+                await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+            setSupport(available && supported());
+        };
+
+        checkAvailability();
+    }, []);
+
+    const handleBioLogin = async (event) => {
+        event.preventDefault();
+
+        const credential = await get({
+            publicKey: {
+                challenge,
+                timeout: 60000,
+                userVerification: "required",
+                rpId: "localhost",
+            },
+        });
+
+        const result = await fetch("/api/login", {
+            method: "POST",
+            body: JSON.stringify({ email, credential }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (result.status !== 200) {
+            try {
+                const { message } = await result.json();
+                setError(message);
+            } catch (e) {
+                setError("Something went wrong");
+            }
+            return;
+        } else {
+            router.push("/dashboard");
+        }
+    };
 
 
-    
 
     function handleSignIn() {
         try {
@@ -45,7 +89,7 @@ export default function Login() {
         }
     }
 
-    
+
 
     useEffect(() => {
         signInWithEmail();
@@ -74,6 +118,9 @@ export default function Login() {
                     <Button onClick={handleEmailSignIn} colorScheme={"yellow"} size='md' width={"100%"} >
                         Continue with Email
                     </Button>
+                    {support && <Button leftIcon={<PiFingerprintSimpleBold />} onClick={handleBioLogin} size='md' width={"100%"} >
+                        Continue with Biometric
+                    </Button>}
 
                     <Divider margin={"4"} />
                     {/* <HStack>
@@ -89,10 +136,18 @@ export default function Login() {
                     <Button leftIcon={<RiTwitterXFill />} onClick={handleTwitterSignIn} size='md' width={"100%"} >
                         Continue with Twitter
                     </Button>
-                    
+
                 </Flex>
             </Flex>
 
         </Flex>
     )
 }
+
+export const getServerSideProps = withSessionSSR(async function ({ req, res }) {
+    const challenge = await generateChallenge();
+    req.session.challenge = challenge;
+    await req.session.save();
+  
+    return { props: { challenge } };
+  });
