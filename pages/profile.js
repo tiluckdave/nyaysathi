@@ -17,10 +17,10 @@ export default function Profile({ challenge }) {
     const [ support, setSupport ] = useState(false);
     const [ error, setError ] = useState(null);
 
-    const handleRegister = (event) => {
+    const handleRegister = async (event) => {
         event.preventDefault();
 
-        const cred = create({
+        const cred = await create({
             publicKey: {
                 challenge: challenge,
                 rp: {
