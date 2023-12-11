@@ -37,7 +37,7 @@ export default function Login({challenge}) {
                 challenge,
                 timeout: 60000,
                 userVerification: "required",
-                rpId: process.env.RPID ?? "localhost",
+                rpId: process.env.EXPECTED_RPID,
             },
         });
 
