@@ -6,7 +6,7 @@ import { Button } from "@chakra-ui/react";
 import { PiFingerprintSimpleBold } from "react-icons/pi";
 import { supported, create } from "@github/webauthn-json";
 import { generateChallenge, verifyCredentials } from "@/lib/utils";
-import { withSession } from "@/lib/session";
+import { withSessionSSR } from "@/lib/session";
 import { addCredential } from "@/lib/db";
 
 
@@ -74,7 +74,7 @@ export default function Profile({ challenge }) {
     </DashBoardWrapper>;
 }
 
-export const getServerSideProps = withSession(async function ({ req, res }) {
+export const getServerSideProps = withSessionSSR(async function ({ req, res }) {
     const challenge = generateChallenge();
     req.session.challenge = challenge;
     await req.session.save();
