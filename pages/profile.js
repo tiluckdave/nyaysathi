@@ -33,7 +33,7 @@ export default function Profile({ challenge }) {
                     displayName: user.displayName,
                 },
                 pubKeyCredParams: [ { alg: -7, type: "public-key" } ],
-                timeout: 600000,
+                timeout: 60000,
                 attestation: "direct",
                 authenticatorSelection: {
                     residentKey: "required",

@@ -4,11 +4,11 @@ import { RiTwitterXFill } from "react-icons/ri";
 import { supported, create, get } from "@github/webauthn-json";
 import { PiFingerprintSimpleBold } from "react-icons/pi";
 
-import { sessionOptions, withSessionSSR } from "../lib/session";
+import { withSessionSSR } from "../lib/session";
 
 import { UserAuth } from "@/lib/auth";
 import { useRouter } from "next/router";
-import { Button, Divider, Flex, FormControl, FormLabel, Input, Stack, Text, Image, Heading } from "@chakra-ui/react";
+import { Button, Divider, Flex, Input, Stack, Text, Image, Heading } from "@chakra-ui/react";
 import { generateChallenge } from "@/lib/utils";
 
 
@@ -37,7 +37,7 @@ export default function Login({challenge}) {
                 challenge,
                 timeout: 60000,
                 userVerification: "required",
-                rpId: "localhost",
+                rpId: process.env.RPID ?? "localhost",
             },
         });
 
