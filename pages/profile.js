@@ -52,6 +52,11 @@ export default function Profile({ challenge }) {
             },
             body: JSON.stringify({ id: user.uid, name: user.email, displayName: user.displayName, cred }),
         });
+
+        if (!res.ok) {
+            setError(await res.text());
+            return;
+        }
     };
 
     useEffect(() => {
@@ -71,6 +76,7 @@ export default function Profile({ challenge }) {
         {support && <Button leftIcon={<PiFingerprintSimpleBold />} onClick={handleRegister} size='md' width={"100%"} >
             Add Biometric
         </Button>}
+        {error && <p>{error}</p>}
     </DashBoardWrapper>;
 }
 
