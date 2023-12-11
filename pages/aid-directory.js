@@ -89,7 +89,7 @@ export default function AidDirectory() {
                     onChange={e => setState(e.target.value)}
                 >
                     {states.map((state) => (
-                        <option value={state.name}>{state.name}</option>
+                        <option key={state.name} value={state.name}>{state.name}</option>
                     ))}
                 </ChakraSelect>
                 <Select
@@ -108,7 +108,7 @@ export default function AidDirectory() {
             <Flex gap={4} mt={10} flexDirection={{ base: "column", lg: "row" }} >
                 <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(200px, 1fr))'>
                     {centers?.map((center) => (
-                        <Card maxW='m'>
+                        <Card key={center.uid} maxW='m'>
                             <CardBody backgroundColor={"gray.100"} rounded={10} dropShadow={"lg"}>
 
                                 <Stack  spacing='3'>
