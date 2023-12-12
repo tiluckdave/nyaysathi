@@ -59,8 +59,7 @@ export default function Login({ challenge }) {
             return;
         } else {
             const { userId } = await result.json();
-            signInWithPassword(email, userId);
-            router.push("/dashboard");
+            await signInWithPassword(email, userId);
         }
     };
 
