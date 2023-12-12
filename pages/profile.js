@@ -70,10 +70,11 @@ export default function Profile({ challenge }) {
         checkAvailability();
     }, []);
 
-    if (!user)  {
-        setUser(localStorage.getItem("user"));
-    }
-
+    useEffect(() => {
+        if (!user) {
+            setUser(localStorage.getItem("user"));
+        }
+    }, [ setUser, user ]);
 
     return <DashBoardWrapper page="profile">
         <h1>Profile</h1>
