@@ -5,14 +5,13 @@ import { useRouter } from "next/router";
 import { Button } from "@chakra-ui/react";
 import { PiFingerprintSimpleBold } from "react-icons/pi";
 import { supported, create } from "@github/webauthn-json";
-import { generateChallenge, verifyCredentials } from "@/lib/utils";
+import { generateChallenge } from "@/lib/utils";
 import { withSessionSSR } from "@/lib/session";
-import { addCredential } from "@/lib/db";
 
 
 export default function Profile({ challenge }) {
     const router = useRouter();
-    const { user } = UserAuth();
+    const { user, setUser } = UserAuth();
 
     const [ support, setSupport ] = useState(false);
     const [ error, setError ] = useState(null);
@@ -70,6 +69,10 @@ export default function Profile({ challenge }) {
         };
         checkAvailability();
     }, []);
+
+    if (!user)  {
+        setUser(localStorage.getItem("user"));
+    }
 
 
     return <DashBoardWrapper page="profile">

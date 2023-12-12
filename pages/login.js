@@ -62,6 +62,7 @@ export default function Login({ challenge }) {
             const { userId } = await result.json();
             const user = await getUser(userId);
             console.log(user);
+            localStorage.setItem("user", JSON.stringify(user));
             setUser(user);
         }
     };
