@@ -77,8 +77,8 @@ export default function Profile({ challenge }) {
 
     return <DashBoardWrapper page="profile">
         <h1>Profile</h1>
-        <p>Hi {user?.displayName || User.name}!</p>
-        <p>Your email is {user?.email || User.email}.</p>
+        <p>Hi {user?.displayName || User?.name}!</p>
+        <p>Your email is {user?.email || User?.email}.</p>
         {support && <Button leftIcon={<PiFingerprintSimpleBold />} onClick={handleRegister} size='md' width={"100%"} >
             Add Biometric
         </Button>}
