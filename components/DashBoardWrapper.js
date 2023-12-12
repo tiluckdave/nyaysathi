@@ -12,6 +12,7 @@ export default function DashBoardWrapper({ children, page }) {
     const file = page === "file" ? true : false
     const news = page === "news" ? true : false
     const aid = page === "aid" ? true : false
+    const profile = page === "profile" ? true : false
 
     return (
         <Flex
@@ -38,7 +39,7 @@ export default function DashBoardWrapper({ children, page }) {
                         </Button>
                     </Link>
                     <Link href="/aid-directory" width="100%">
-                        <Button colorScheme='gray' bg={aid && "gray.200"} padding={{ base: 4, lg: 2 }} rounded={4} alignItems={"center"} justifyContent="flex-start" width={"100%"}> 
+                        <Button colorScheme='gray' bg={aid && "gray.200"} padding={{ base: 4, lg: 2 }} rounded={4} alignItems={"center"} justifyContent="flex-start" width={"100%"}>
                             <Icon boxSize={5} as={RiContactsBookLine} />
                             <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Aid Directory</Text>
                         </Button>
@@ -52,10 +53,12 @@ export default function DashBoardWrapper({ children, page }) {
                 </Flex>
 
                 <Flex flexDirection="column" gap={4}>
-                    <Button colorScheme='gray' padding={{ base: 4, lg: 2 }} rounded={4} alignItems={"center"} justifyContent="flex-start" >
-                        <Icon boxSize={5} as={FiUser} />
-                        <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Profile</Text>
-                    </Button>
+                    <Link href="/profile" width="100%">
+                        <Button colorScheme='gray' bg={profile && "gray.200"} padding={{ base: 4, lg: 2 }} rounded={4} alignItems={"center"} justifyContent="flex-start" width={"100%"} >
+                            <Icon boxSize={5} as={FiUser} />
+                            <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Profile</Text>
+                        </Button>
+                    </Link>
                 </Flex>
             </Flex>
             <Flex flexDirection={"column"} marginLeft={{ base: "0", lg: "250px" }} marginBottom={{ base: "50px", lg: "0" }} width={"100%"} minHeight={"100vh"} padding={8}>
