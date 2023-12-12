@@ -16,7 +16,7 @@ import { getUser } from "@/lib/db";
 export default function Login({ challenge }) {
     const router = useRouter();
     const [ email, setEmail ] = useState("");
-    const { user, setUser, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn, signInWithPassword } = UserAuth();
+    const { user, setUser, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn } = UserAuth();
     const [ error, setError ] = useState("");
     const [ support, setSupport ] = useState(false);
 
