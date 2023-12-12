@@ -10,12 +10,13 @@ import { UserAuth } from "@/lib/auth";
 import { useRouter } from "next/router";
 import { Button, Divider, Flex, Input, Stack, Text, Image, Heading } from "@chakra-ui/react";
 import { generateChallenge } from "@/lib/utils";
+import { getUser } from "@/lib/db";
 
 
 export default function Login({ challenge }) {
     const router = useRouter();
     const [ email, setEmail ] = useState("");
-    const { user, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn, signInWithPassword } = UserAuth();
+    const { user, setUser, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn, signInWithPassword } = UserAuth();
     const [ error, setError ] = useState("");
     const [ support, setSupport ] = useState(false);
 
@@ -59,7 +60,8 @@ export default function Login({ challenge }) {
             return;
         } else {
             const { userId } = await result.json();
-            await signInWithPassword(email, userId);
+            const user = await getUser(userId);
+            setUser(user);
         }
     };
 
