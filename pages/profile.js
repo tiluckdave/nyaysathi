@@ -2,22 +2,55 @@ import React, { useEffect, useState } from "react";
 import DashBoardWrapper from "@/components/DashBoardWrapper";
 import { UserAuth } from "@/lib/auth";
 import { useRouter } from "next/router";
-import { Button } from "@chakra-ui/react";
+// import { Button } from "@chakra-ui/react";
 import { PiFingerprintSimpleBold } from "react-icons/pi";
 import { supported, create } from "@github/webauthn-json";
 import { generateChallenge } from "@/lib/utils";
 import { withSessionSSR } from "@/lib/session";
+import { FaUserEdit } from "react-icons/fa";
+import { updateDetailsDB } from "@/lib/db";
+
+import {
+    Flex,
+    Avatar,
+    Button,
+    FormControl,
+    FormLabel,
+    Heading,
+    Input,
+    Select,
+    Tab,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Tabs,
+    Text,
+    VStack,
+    Box,
+    HStack,
+    Grid
+} from '@chakra-ui/react'
 
 
 export default function Profile({ challenge }) {
     const router = useRouter();
     const { user, setUser } = UserAuth();
-    const [ User, SetUser ] = useState(null);
+    const [User, SetUser] = useState(null);
 
-    const [ support, setSupport ] = useState(false);
-    const [ error, setError ] = useState(null);
+    const [support, setSupport] = useState(false);
+    const [error, setError] = useState(null);
 
-    const handleRegister = async (event) => {
+    const [fname, setFname] = useState("");
+    const [lname, setLname] = useState("");
+
+    useEffect(() => {
+        setFname((user?.displayName).split(" ")[0] || (User?.name).split(" ")[0])
+        setLname((user?.displayName).split(" ")[1] || (User?.name).split(" ")[1])
+    }, [setFname,setLname]);
+
+
+
+    async function handleRegister(event) {
         event.preventDefault();
 
         const cred = await create({
@@ -32,7 +65,7 @@ export default function Profile({ challenge }) {
                     name: user.email,
                     displayName: user.displayName,
                 },
-                pubKeyCredParams: [ { alg: -7, type: "public-key" } ],
+                pubKeyCredParams: [{ alg: -7, type: "public-key" }],
                 timeout: 60000,
                 attestation: "direct",
                 authenticatorSelection: {
@@ -60,7 +93,7 @@ export default function Profile({ challenge }) {
                 }
             }
             );
-    };
+    }
 
     useEffect(() => {
         const checkAvailability = async () => {
@@ -73,17 +106,173 @@ export default function Profile({ challenge }) {
 
     useEffect(() => {
         SetUser(JSON.parse(localStorage.getItem("user")));
-    }, [ SetUser, User ]);
+    }, [SetUser, User]);
 
-    return <DashBoardWrapper page="profile">
-        <h1>Profile</h1>
-        <p>Hi {user?.displayName || User?.name}!</p>
-        <p>Your email is {user?.email || User?.email}.</p>
-        {support && <Button leftIcon={<PiFingerprintSimpleBold />} onClick={handleRegister} size='md' width={"100%"} >
-            Add Biometric
-        </Button>}
-        {error && <p>{error}</p>}
-    </DashBoardWrapper>;
+    const updateProfile = () => {
+        const name = fname + " " + lname;
+        const updatedUser = updateDetailsDB(user?.uid || User?.uid, name)
+        if (updatedUser.name === name) {
+            console.log("User Updated Succesfully in UI")
+        }
+    }
+
+    return (
+        <DashBoardWrapper page="profile">
+            {/* <h1>Profile</h1>
+            <p>Hi {user?.displayName || User?.name}!</p>
+            <p>Your email is {user?.email || User?.email}.</p>
+            {support && <Button leftIcon={<PiFingerprintSimpleBold />} onClick={handleRegister} size='md' width={"100%"} >
+                Add Biometric
+            </Button>}
+            {error && <p>{error}</p>} */}
+
+            <Flex gap={2} mt={"40"} flexDirection="column" maxW="container.lg">
+                <Box
+                    as="aside"
+                    flex={1}
+                    mr={{ base: 0, md: 5 }}
+                    mb={{ base: 5, md: 0 }}
+                    bg="white"
+                    rounded="md"
+                    borderWidth={1}
+                    borderColor="brand.light"
+                    style={{ transform: 'translateY(-100px)' }}
+                    boxShadow={"lg"}
+                    width={"100%"}
+                >
+
+
+                    <HStack spacing={2} py={5} justifyContent={"space-around"} borderBottomWidth={1} borderColor="brand.light">
+                        <Avatar
+                            size="2xl"
+                            name="Tim Cook"
+                            cursor="pointer"
+                            src={user?.photoURL || User?.photoURL}
+                        >
+                        </Avatar>
+                        <VStack spacing={1}>
+                            <Heading as="h3" fontSize="xl" color="brand.dark">
+                                {user?.displayName || User?.name}
+                            </Heading>
+                            <Text color="brand.gray" fontSize="sm">
+                                {user?.email || User?.email}
+                            </Text>
+                        </VStack>
+                    </HStack>
+
+
+                </Box>
+
+                <Box
+                    as="main"
+                    flex={3}
+                    d="flex"
+                    flexDir="column"
+                    justifyContent="space-between"
+                    pt={5}
+                    bg="white"
+                    rounded="md"
+                    borderWidth={1}
+                    borderColor="gray.200"
+                    style={{ transform: 'translateY(-100px)' }}
+                    boxShadow={"lg"}
+
+                >
+                    <Tabs>
+                        <TabList px={5}>
+
+                            <Tab
+                                key="Account Setting"
+                                mx={3}
+                                px={0}
+                                py={3}
+                                fontWeight="semibold"
+                                color="cadet"
+                                borderBottomWidth={1}
+                                _active={{ bg: 'transparent' }}
+                                _selected={{ color: 'brand.dark' }}
+                            >
+                                Account Setting
+                            </Tab>
+
+                        </TabList>
+
+                        <TabPanels px={3} mt={5}>
+                            <TabPanel>
+                                <Grid
+                                    templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
+                                    gap={6}
+                                >
+                                    <FormControl id="firstName">
+                                        <FormLabel>First Name</FormLabel>
+                                        <Input onChange={e => setFname(e.target.value)} focusBorderColor="brand.blue" type="text" value={fname} />
+                                    </FormControl>
+                                    <FormControl id="lastName">
+                                        <FormLabel>Last Name</FormLabel>
+                                        <Input onChange={e => setLname(e.target.value)} focusBorderColor="brand.blue" type="text" value={lname} />
+                                    </FormControl>
+                                    {/* <FormControl id="phoneNumber">
+                                        <FormLabel>Phone Number</FormLabel>
+                                        <Input
+                                            focusBorderColor="brand.blue"
+                                            type="tel"
+                                            placeholder="Enter Phone"
+                                        />
+                                    </FormControl> */}
+                                    <FormControl id="emailAddress">
+                                        <FormLabel>Email Address</FormLabel>
+                                        <Input
+                                            focusBorderColor="brand.blue"
+                                            type="email"
+                                            value={user?.email || User?.email}
+                                            disabled
+                                        />
+                                    </FormControl>
+                                    {/* <FormControl id="city">
+                                        <FormLabel>City</FormLabel>
+                                        <Select focusBorderColor="brand.blue" placeholder="Select city">
+                                            <option value="california">California</option>
+                                            <option value="washington">Washington</option>
+                                            <option value="toronto">Toronto</option>
+                                            <option value="newyork" selected>
+                                                New York
+                                            </option>
+                                            <option value="london">London</option>
+                                            <option value="netherland">Netherland</option>
+                                            <option value="poland">Poland</option>
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl id="country">
+                                        <FormLabel>Country</FormLabel>
+                                        <Select focusBorderColor="brand.blue" placeholder="Select country">
+                                            <option value="america" selected>
+                                                America
+                                            </option>
+                                            <option value="england">England</option>
+                                            <option value="poland">Poland</option>
+                                        </Select>
+                                    </FormControl> */}
+                                </Grid>
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>
+
+                    <Box mt={5} py={5} px={8} borderTopWidth={1} borderColor="brand.light">
+                        <HStack spacing={2}>
+                            <Button   onClick={updateProfile} colorScheme="yellow" leftIcon={<FaUserEdit />}>
+                                Update
+                            </Button>
+                            {!support && (
+                                <Button colorScheme="yellow" leftIcon={<PiFingerprintSimpleBold />} onClick={handleRegister}>
+                                    Add Biometric
+                                </Button>
+                            )}
+                        </HStack>
+                    </Box>
+                </Box>
+            </Flex>
+        </DashBoardWrapper>
+    )
 }
 
 export const getServerSideProps = withSessionSSR(async function ({ req, res }) {
