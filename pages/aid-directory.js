@@ -9,10 +9,6 @@ import Link from "next/link";
 import { LuMapPin } from "react-icons/lu";
 import { MdPhoneInTalk } from "react-icons/md";
 export default function AidDirectory() {
-
-
-
-
     const [state, setState] = useState("");
     const [cities, setCities] = useState([]);
     const [centers, setCenters] = useState([]);
