@@ -15,7 +15,7 @@ import { generateChallenge } from "@/lib/utils";
 export default function Login({ challenge }) {
     const router = useRouter();
     const [ email, setEmail ] = useState("");
-    const { user, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn, signInWithUserId } = UserAuth();
+    const { user, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn, signInWithPassword } = UserAuth();
     const [ error, setError ] = useState("");
     const [ support, setSupport ] = useState(false);
 
@@ -59,7 +59,7 @@ export default function Login({ challenge }) {
             return;
         } else {
             const { userId } = await result.json();
-            signInWithUserId(userId);
+            signInWithPassword(email, userId);
             router.push("/dashboard");
         }
     };
