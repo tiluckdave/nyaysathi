@@ -37,7 +37,7 @@ export default function Login({challenge}) {
                 challenge,
                 timeout: 60000,
                 userVerification: "required",
-                rpId: router.hostname,
+                // rpId: router.hostname,
             },
         });
 
