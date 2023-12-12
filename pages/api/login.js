@@ -7,7 +7,7 @@ async function handler(request, response) {
     request.session.userId = userId;
     await request.session.save();
 
-    response.status(200).json(userId);
+    response.status(200).json({ userId: userId });
   } catch (error) {
     response.status(500).json({ message: error.message });
   }

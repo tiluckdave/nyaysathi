@@ -12,10 +12,10 @@ import { Button, Divider, Flex, Input, Stack, Text, Image, Heading } from "@chak
 import { generateChallenge } from "@/lib/utils";
 
 
-export default function Login({challenge}) {
+export default function Login({ challenge }) {
     const router = useRouter();
     const [ email, setEmail ] = useState("");
-    const { user, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn } = UserAuth();
+    const { user, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn, signInWithUserId } = UserAuth();
     const [ error, setError ] = useState("");
     const [ support, setSupport ] = useState(false);
 
@@ -58,6 +58,8 @@ export default function Login({challenge}) {
             }
             return;
         } else {
+            const { userId } = await result.json();
+            signInWithUserId(userId);
             router.push("/dashboard");
         }
     };
@@ -149,6 +151,6 @@ export const getServerSideProps = withSessionSSR(async function ({ req, res }) {
     const challenge = await generateChallenge();
     req.session.challenge = challenge;
     await req.session.save();
-  
+
     return { props: { challenge } };
-  });
+});
