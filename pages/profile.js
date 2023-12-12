@@ -12,6 +12,7 @@ import { withSessionSSR } from "@/lib/session";
 export default function Profile({ challenge }) {
     const router = useRouter();
     const { user, setUser } = UserAuth();
+    const [ User, SetUser ] = useState(null);
 
     const [ support, setSupport ] = useState(false);
     const [ error, setError ] = useState(null);
@@ -41,7 +42,7 @@ export default function Profile({ challenge }) {
             },
         });
 
-       
+
 
 
         fetch("/api/register", {
@@ -51,7 +52,7 @@ export default function Profile({ challenge }) {
             },
             body: JSON.stringify({ id: user.uid, name: user.email, displayName: user.displayName, cred }),
         }).then((response) => response.json())
-        .then((data) => {
+            .then((data) => {
                 if (data.userId) {
                     router.push("/dashboard");
                 } else {
@@ -71,15 +72,13 @@ export default function Profile({ challenge }) {
     }, []);
 
     useEffect(() => {
-        if (!user) {
-            setUser(localStorage.getItem("user"));
-        }
-    }, [ setUser, user ]);
+        SetUser(JSON.parse(localStorage.getItem("user")));
+    }, [ SetUser, User ]);
 
     return <DashBoardWrapper page="profile">
         <h1>Profile</h1>
-        <p>Hi {user?.displayName}!</p>
-        <p>Your email is {user?.email}.</p>
+        <p>Hi {user?.displayName || User.name}!</p>
+        <p>Your email is {user?.email || User.email}.</p>
         {support && <Button leftIcon={<PiFingerprintSimpleBold />} onClick={handleRegister} size='md' width={"100%"} >
             Add Biometric
         </Button>}
