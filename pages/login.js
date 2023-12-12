@@ -61,6 +61,7 @@ export default function Login({ challenge }) {
         } else {
             const { userId } = await result.json();
             const user = await getUser(userId);
+            console.log(user);
             setUser(user);
         }
     };
