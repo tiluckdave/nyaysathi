@@ -229,6 +229,7 @@ export default function Profile({ challenge }) {
                                             type="email"
                                             value={user?.email || User?.email}
                                             disabled
+                                            _disabled={{ bg: 'gray.100' }}
                                         />
                                     </FormControl>
                                     {/* <FormControl id="city">
