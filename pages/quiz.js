@@ -81,11 +81,7 @@ export default function Quiz() {
     }, []);
     return (
         <DashBoardWrapper>
-
-
-
-
-            <Modal isOpen={true} size="2xl" isCentered >
+            <Modal isOpen={true} size="full" isCentered >
                 <ModalOverlay />
                 <ModalContent borderRadius="md" bg="gray.100">
                     <ModalHeader
