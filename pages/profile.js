@@ -18,7 +18,6 @@ import {
     FormLabel,
     Heading,
     Input,
-    Select,
     Tab,
     TabList,
     TabPanel,
@@ -34,21 +33,14 @@ import {
 
 export default function Profile({ challenge }) {
     const router = useRouter();
-    const { user, setUser } = UserAuth();
-    const [User, SetUser] = useState(null);
+    const { user } = UserAuth();
+    const [ User, SetUser ] = useState(null);
 
-    const [support, setSupport] = useState(false);
-    const [error, setError] = useState(null);
+    const [ support, setSupport ] = useState(false);
+    const [ error, setError ] = useState(null);
 
-    const [fname, setFname] = useState("");
-    const [lname, setLname] = useState("");
-
-    useEffect(() => {
-        setFname((user?.displayName).split(" ")[0] || (User?.name).split(" ")[0])
-        setLname((user?.displayName).split(" ")[1] || (User?.name).split(" ")[1])
-    }, [setFname,setLname]);
-
-
+    const [ fname, setFname ] = useState("");
+    const [ lname, setLname ] = useState("");
 
     async function handleRegister(event) {
         event.preventDefault();
@@ -61,11 +53,11 @@ export default function Profile({ challenge }) {
                     id: router.hostname,
                 },
                 user: {
-                    id: user.uid,
-                    name: user.email,
-                    displayName: user.displayName,
+                    id: user?.uid,
+                    name: user?.email,
+                    displayName: user?.displayName,
                 },
-                pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+                pubKeyCredParams: [ { alg: -7, type: "public-key" } ],
                 timeout: 60000,
                 attestation: "direct",
                 authenticatorSelection: {
@@ -95,6 +87,20 @@ export default function Profile({ challenge }) {
             );
     }
 
+    const updateProfile = () => {
+        const name = fname + " " + lname;
+        const updatedUser = updateDetailsDB(user?.uid || User?.uid, name)
+        if (updatedUser.name === name) {
+            console.log("User Updated Succesfully in UI")
+        }
+    }
+
+    useEffect(() => {
+        if (localStorage.getItem("user")) {
+            SetUser(JSON.parse(localStorage.getItem("user")));
+        }
+    }, [ SetUser, User ]);
+
     useEffect(() => {
         const checkAvailability = async () => {
             const available =
@@ -105,27 +111,24 @@ export default function Profile({ challenge }) {
     }, []);
 
     useEffect(() => {
-        SetUser(JSON.parse(localStorage.getItem("user")));
-    }, [SetUser, User]);
-
-    const updateProfile = () => {
-        const name = fname + " " + lname;
-        const updatedUser = updateDetailsDB(user?.uid || User?.uid, name)
-        if (updatedUser.name === name) {
-            console.log("User Updated Succesfully in UI")
+        if (user || User) {
+            setFname((user.displayName).split(" ")[ 0 ] || (User.name).split(" ")[ 0 ])
+            setLname((user.displayName).split(" ")[ 1 ] || (User.name).split(" ")[ 1 ])
         }
+    }, [ User, setFname, setLname, user ]);
+
+
+    if (user || User) { }
+    else {
+        return (
+            <DashBoardWrapper page="profile">
+                <h1>Loading...</h1>
+            </DashBoardWrapper>
+        )
     }
 
     return (
         <DashBoardWrapper page="profile">
-            {/* <h1>Profile</h1>
-            <p>Hi {user?.displayName || User?.name}!</p>
-            <p>Your email is {user?.email || User?.email}.</p>
-            {support && <Button leftIcon={<PiFingerprintSimpleBold />} onClick={handleRegister} size='md' width={"100%"} >
-                Add Biometric
-            </Button>}
-            {error && <p>{error}</p>} */}
-
             <Flex gap={2} mt={"40"} flexDirection="column" maxW="container.lg">
                 <Box
                     as="aside"
@@ -259,10 +262,10 @@ export default function Profile({ challenge }) {
 
                     <Box mt={5} py={5} px={8} borderTopWidth={1} borderColor="brand.light">
                         <HStack spacing={2}>
-                            <Button   onClick={updateProfile} colorScheme="yellow" leftIcon={<FaUserEdit />}>
+                            <Button onClick={updateProfile} colorScheme="yellow" leftIcon={<FaUserEdit />}>
                                 Update
                             </Button>
-                            {!support && (
+                            {support && (
                                 <Button colorScheme="yellow" leftIcon={<PiFingerprintSimpleBold />} onClick={handleRegister}>
                                     Add Biometric
                                 </Button>
