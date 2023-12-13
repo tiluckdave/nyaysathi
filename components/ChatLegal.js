@@ -13,6 +13,12 @@ export default function ChatLegal() {
 
     return (
         <Flex flexDirection={"column"}>
+            <Box padding={6} rounded={10} width={"65%"}  bgGradient='linear(to-r,  pink.50, yellow.50, purple.50)' boxShadow={"sm"}>
+                Hi, I am NyaySathi. I can help you with your legal queries. Ask me anything. I can talk in English and Hindi.
+            </Box>
+            <Box padding={6} rounded={10} width={"65%"} bgGradient='linear(to-r,  pink.50, yellow.50, purple.50)' boxShadow={"sm"}>
+                Hi, I am NyaySathi. I can help you with your legal queries. Ask me anything. I can talk in English and Hindi.
+            </Box>
             <Flex flexDirection={"column"} gap={1} position={"fixed"} bottom={{base: "70px", lg: 4}} width={{base: "calc(100% - 40px)", lg: "calc(100% - 322px)"}} marginLeft={{base: "-10px", lg: "0"}}>
                 <Flex gap={2} flexDirection={"column"} position={"relative"} >
                     <Input placeholder="Type your query here" bg={"gray.50"} focusBorderColor='yellow.400' disabled={loading} paddingRight={12} value={userInput} rounded={"full"}

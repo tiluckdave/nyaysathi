@@ -4,7 +4,7 @@ import { Heading } from "@chakra-ui/react";
 export default function Storage() {
     return (
         <DashBoardWrapper page="storage">
-            <Heading>Secure Storage</Heading>
+            <Heading fontSize="3xl">Secure Storage</Heading>
         </DashBoardWrapper>
     )
 }
