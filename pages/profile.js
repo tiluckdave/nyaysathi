@@ -112,8 +112,8 @@ export default function Profile({ challenge }) {
 
     useEffect(() => {
         if (user || User) {
-            setFname((user.displayName).split(" ")[ 0 ] || (User.name).split(" ")[ 0 ])
-            setLname((user.displayName).split(" ")[ 1 ] || (User.name).split(" ")[ 1 ])
+            setFname((user?.displayName)?.split(" ")[ 0 ] || (User?.name)?.split(" ")[ 0 ])
+            setLname((user?.displayName)?.split(" ")[ 1 ] || (User?.name)?.split(" ")[ 1 ])
         }
     }, [ User, setFname, setLname, user ]);
 
