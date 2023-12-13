@@ -44,7 +44,7 @@ export default function AskQuery() {
                 <Button colorScheme='yellow' size={{ base: "sm", lg: "md" }} rounded="full" position={"absolute"} bottom={{ base: 2, lg: 3 }} right={{ base: 2, lg: 3 }} isLoading={loading} zIndex={2} onClick={askSathi}><Icon as={IoSend} color={"gray.50"} /></Button>
             </Flex>
 
-            <Flex flexDirection={"column"} gap={2} padding={6} rounded={10} boxShadow={"lg"} bgGradient='linear(to-r, yellow.100, pink.100, purple.100)'>
+            <Flex flexDirection={"column"} gap={2} padding={6} rounded={10} boxShadow={"lg"} bgGradient='linear(to-r,  yellow.50, pink.50, purple.50)' border='1px' borderColor='gray.100'>
                 {!loading && !apiOutput && <Text>Hi, I am NyaySathi. I can help you with your legal queries. Ask me anything. I can talk in English and Hindi.</Text>}
                 {loading && <Text fontStyle={"italic"} fontWeight={"bold"}>NyaySathi is Thinking...</Text>}
                 {!loading && apiOutput && <Flex flexDirection={"column"}>

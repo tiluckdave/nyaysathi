@@ -60,9 +60,9 @@ export default function DashBoardWrapper({ children, page }) {
                     </Link> */}
                 </Flex>
 
-                <Flex flexDirection="column" gap={4} width={{base:"20%", lg:"100%"}}>
-                    <Link href="/profile" width="100%">
-                        <Button colorScheme='gray' bg={profile && "gray.200"} padding={2} rounded={{base: "full", lg:4}} alignItems={"center"} justifyContent="flex-start" width="100%" >
+                <Flex flexDirection={{base:"row", lg: "column"}} gap={4} width={{base:"20%", lg:"100%"}}>
+                    <Link href="/profile" width={{base: "0", lg: "100%"}}>
+                        <Button colorScheme='gray' bg={profile && "gray.200"} padding={2} rounded={{base: "full", lg:4}} alignItems={"center"} justifyContent="flex-start" width={{base: "auto", lg: "100%"}} >
                             <Icon boxSize={{base:7, lg:5}} as={FiUser} />
                             <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Profile</Text>
                         </Button>
