@@ -95,7 +95,7 @@ export default function ChatLegal() {
 
             <div ref={messagesEndRef} />
 
-            <Flex flexDirection={"column"} gap={1} position={"fixed"} bottom={{ base: "60px", lg: 0 }} width={{ base: "calc(100% - 40px)", lg: "calc(100% - 312px)" }} marginLeft={{ base: "-10px", lg: "0" }} bg={"white"}>
+            <Flex flexDirection={"column"} gap={1} position={"fixed"} bottom={{ base: "60px", lg: 0 }} width={{ base: "calc(100% - 30px)", lg: "calc(100% - 312px)" }} marginLeft={{ base: "-10px", lg: "0" }} bg={"white"}>
                 <Flex gap={2} flexDirection={"column"} position={"relative"} >
                     <Input placeholder="Type your query here" bg={"gray.50"} focusBorderColor='yellow.400' disabled={loading} paddingRight={12} value={userInput} rounded={"full"}
                         onChange={(e) => setUserInput(e.target.value)} />

@@ -69,7 +69,7 @@ export default function DashBoardWrapper({ children, page }) {
                     </Link>
                 </Flex>
             </Flex>
-            <Flex flexDirection={"column"} marginLeft={{ base: "0", lg: "250px" }} marginBottom={{ base: "50px", lg: "0" }} width={"100%"} minHeight={"100vh"} padding={8}>
+            <Flex flexDirection={"column"} marginLeft={{ base: "0", lg: "250px" }} marginBottom={{ base: "50px", lg: "0" }} width={"100%"} minHeight={"100vh"} padding={{base: 6, lg:8}}>
                 {children}
             </Flex>
         </Flex>

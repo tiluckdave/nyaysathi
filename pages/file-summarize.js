@@ -49,7 +49,7 @@ export default function FileSummarize() {
                     <Flex width="100%" bg="gray.200" rounded="10" padding="3" flexDirection="row" justifyContent="space-between" alignItems={"center"} mb="6">
                         <Flex flexDirection="column">
                             <Text fontSize={"md"} fontWeight={"bold"}>{file.name}</Text>
-                            <Text>{(file.size / 1024).toFixed(2)} KB</Text>
+                            <Text>{file.sizeReadable}</Text>
                         </Flex>
 
                         <Button colorScheme="red" onClick={RemoveFile} rounded={"full"} padding={"2"}>
