@@ -2,7 +2,7 @@ import AdminDashboardWrapper from "@/components/AdminDashboardWrapper";
 import { UserAuth } from "@/lib/auth";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-export default function dashboard() {
+export default function Dashboard() {
     const { user } = UserAuth();
     const router = useRouter();
 
