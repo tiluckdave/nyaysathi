@@ -177,7 +177,7 @@ export default function AddQuestion() {
                 </ModalContent>
             </Modal>
 
-            <Box mt={10} boxShadow={"lg"} rounded="md" borderWidth={2} borderColor="brand.light">
+            <Box mt={10} boxShadow={"lg"} rounded="md" borderWidth={2} borderColor="brand.light" bg={"gray.100"}>
                 <TableContainer mt={20}>
                     <Table maxW={"100%"} variant='simple'>
                         <Thead >
@@ -193,30 +193,30 @@ export default function AddQuestion() {
                                 <Tr key={index}>
                                     {/* Question Text */}
                                     <Td>
-                                        <Text noOfLines={2}>{row.question}</Text>
+                                       {row.question}
                                     </Td>
 
                                     {/* Options */}
                                     <Td>
-                                        <Text noOfLines={2}>
+                                       
                                             <ul>
                                                 {row.options.map((option, optionIndex) => (
                                                     <li key={optionIndex}>{option}</li>
                                                 ))}
                                             </ul>
-                                        </Text>
+                                     
                                     </Td>
 
                                     {/* Correct Answer */}
                                     <Td>
-                                        <Text noOfLines={2}>{row.correct}</Text>
+                                        {row.correct}
                                     </Td>
 
                                     {/* Edit and Delete Buttons */}
                                     <Td>
                                         <Flex flexDirection={"row"} gap={3}>
                                             <IconButton
-                                                colorScheme="teal"
+                                                colorScheme="yellow"
                                                 variant="solid"
                                                 size="sm"
                                                 icon={<Icon as={FaEdit} />}
