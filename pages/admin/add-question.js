@@ -61,7 +61,9 @@ export default function AddQuestion() {
 
     const handleEdit = (index) => {
         const rowData = data[index];
-        setOptions(rowData.options)
+        setQuestion(rowData.question);
+        setOptions(rowData.options);
+        setCorrectOption(rowData.correct);
         setIsEditModalOpen(true);
         setEditData(rowData);
 
@@ -178,10 +180,10 @@ export default function AddQuestion() {
                 </ModalContent>
             </Modal>
 
-            <Box mt={10} boxShadow={"lg"} rounded="md" borderWidth={2} borderColor="brand.light" bg={"gray.100"}>
-                <TableContainer mt={20}>
-                    <Table maxW={"100%"} variant='simple'>
-                        <Thead >
+            <Box mt={10} boxShadow={"lg"} rounded="md" borderWidth={2} borderColor="brand.light" bg={"gray.100"} overflowX="auto" overflowY="auto" maxWidth="100%">
+                <TableContainer mt={20}>    
+                    <Table maxW={"100%"} variant='simple' >
+                        <Thead  position="sticky" top={0} >
                             <Tr>
                                 <Th fontSize={"md"}>Question Text</Th>
                                 <Th fontSize={"md"}>Options</Th>
