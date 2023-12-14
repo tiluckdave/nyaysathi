@@ -3,7 +3,7 @@ import { Button, Flex, FormControl, FormLabel, Heading, Input, Modal, ModalBody,
 import { IoMdAddCircle } from "react-icons/io";
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useState, useEffect } from "react";
-import { createQuestion, getAllQuestions, deleteQuestion } from "@/lib/db";
+import { createQuestion, getAllQuestions, deleteQuestion,updateQuestionDB } from "@/lib/db";
 
 
 
@@ -61,6 +61,7 @@ export default function AddQuestion() {
 
     const handleEdit = (index) => {
         const rowData = data[index];
+        setOptions(rowData.options)
         setIsEditModalOpen(true);
         setEditData(rowData);
 
@@ -101,7 +102,7 @@ export default function AddQuestion() {
             });
         }
 
-        isEditModalOpen(false);
+        setIsEditModalOpen(false);
     }
     const questionList = async () => {
         const questionDb = await getAllQuestions();
@@ -258,9 +259,11 @@ export default function AddQuestion() {
                             />
                         </FormControl>
 
-                        <FormControl mb={4}>
-                            <FormLabel>Options</FormLabel>
+                        {/* <FormControl mb={4}>
+                            <FormLabel>Options</FormLabel> */}
                             {editData?.options?.map((option, optionIndex) => (
+                                 <FormControl key={optionIndex} mb={4}>
+                                 <FormLabel>{`Option ${optionIndex + 1}`}</FormLabel>
                                 <Input
                                     key={optionIndex}
                                     type="text"
@@ -272,16 +275,32 @@ export default function AddQuestion() {
                                     }}
                                     mb={2}
                                 />
+                                </FormControl>
                             ))}
-                        </FormControl>
+                        {/* </FormControl> */}
 
-                        <FormControl mb={4}>
+                        {/* <FormControl mb={4}>
                             <FormLabel>Correct Answer</FormLabel>
                             <Input
                                 type="text"
                                 value={editData.correct}
                                 onChange={(e) => setCorrectOption(e.target.value)}
                             />
+                        </FormControl> */}
+                        <FormControl mb={4}>
+                            <FormLabel>Correct Option</FormLabel>
+                            <Select
+
+                                value={editData.correct}
+                                onChange={(e) => setCorrectOption(e.target.value)}
+                            >
+                                {options.map((option, index) => (
+                                    <option key={index} value={option}>
+                                        {/* {`Option ${index + 1}`} */}
+                                        {options[index]}
+                                    </option>
+                                ))}
+                            </Select>
                         </FormControl>
                         <ModalFooter>
                             <Button colorScheme="yellow" onClick={updateQuestion}>
