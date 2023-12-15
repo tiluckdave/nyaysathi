@@ -9,6 +9,9 @@ import { generateChallenge } from "@/lib/utils";
 import { withSessionSSR } from "@/lib/session";
 import { FaUserEdit } from "react-icons/fa";
 import { updateDetailsDB } from "@/lib/db";
+import states from '@/data/states.json';
+import Select from 'react-select';
+import axios from "axios";
 
 import {
     Flex,
@@ -27,20 +30,46 @@ import {
     VStack,
     Box,
     HStack,
-    Grid
+    Grid,
+    Select as ChakraSelect
 } from '@chakra-ui/react'
 
 
 export default function Profile({ challenge }) {
     const router = useRouter();
     const { user } = UserAuth();
-    const [ User, SetUser ] = useState(null);
+    const [User, SetUser] = useState(null);
 
-    const [ support, setSupport ] = useState(false);
-    const [ error, setError ] = useState(null);
+    const [support, setSupport] = useState(false);
+    const [error, setError] = useState(null);
 
-    const [ fname, setFname ] = useState("");
-    const [ lname, setLname ] = useState("");
+    const [fname, setFname] = useState("");
+    const [lname, setLname] = useState("");
+    const [state, setState] = useState("");
+    const [phone, setPhone] = useState("");
+    const [city, setCity] = useState("");
+    const [age,setAge] = useState("");
+    const [gender ,setGender] = useState("");
+    const [profession ,setProfession] = useState("");
+    const [cities, setCities] = useState([])
+    const colourStyles = {
+        control: (styles) => ({
+            ...styles, width: '480px', '@media (max-width: 992px)': {
+                width: '100%',
+            }, borderColor: "#D69E2E", lineHeight: "1.65"
+        }),
+        option: (styles) => ({
+            ...styles, width: '480px', '@media (max-width: 992px)': {
+                width: '100%',
+            },
+        }),
+        input: (styles) => ({
+            ...styles, width: '480px', '@media (max-width: 992px)': {
+                width: '100%',
+            },
+        }),
+    };
+
 
     async function handleRegister(event) {
         event.preventDefault();
@@ -57,7 +86,7 @@ export default function Profile({ challenge }) {
                     name: user?.email,
                     displayName: user?.displayName,
                 },
-                pubKeyCredParams: [ { alg: -7, type: "public-key" } ],
+                pubKeyCredParams: [{ alg: -7, type: "public-key" }],
                 timeout: 60000,
                 attestation: "direct",
                 authenticatorSelection: {
@@ -89,7 +118,7 @@ export default function Profile({ challenge }) {
 
     const updateProfile = () => {
         const name = fname + " " + lname;
-        const updatedUser = updateDetailsDB(user?.uid || User?.uid, name)
+        const updatedUser = updateDetailsDB(user?.uid || User?.uid, name ,phone,state,city,age,gender,profession)
         if (updatedUser.name === name) {
             console.log("User Updated Succesfully in UI")
         }
@@ -99,7 +128,7 @@ export default function Profile({ challenge }) {
         if (localStorage.getItem("user")) {
             SetUser(JSON.parse(localStorage.getItem("user")));
         }
-    }, [ SetUser, User ]);
+    }, [SetUser, User]);
 
     useEffect(() => {
         const checkAvailability = async () => {
@@ -112,10 +141,41 @@ export default function Profile({ challenge }) {
 
     useEffect(() => {
         if (user || User) {
-            setFname((user?.displayName)?.split(" ")[ 0 ] || (User?.name)?.split(" ")[ 0 ])
-            setLname((user?.displayName)?.split(" ")[ 1 ] || (User?.name)?.split(" ")[ 1 ])
+            setFname((user?.displayName)?.split(" ")[0] || (User?.name)?.split(" ")[0])
+            setLname((user?.displayName)?.split(" ")[1] || (User?.name)?.split(" ")[1])
         }
-    }, [ User, setFname, setLname, user ]);
+    }, [User, setFname, setLname, user]);
+
+
+    //get cities api
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.post('https://countriesnow.space/api/v0.1/countries/state/cities', {
+                    "country": "India",
+                    state,
+                });
+
+
+                let citiesObj = []
+
+                response.data.data.map((city) => {
+                    citiesObj.push({ "value": city, "label": city })
+                })
+
+
+
+                // Assuming the response data has a "data" property containing the city list
+                setCities(citiesObj);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error('Error fetching city data:', error);
+            }
+        };
+
+        fetchData();
+    }, [state]);
+
 
 
     if (user || User) { }
@@ -208,11 +268,13 @@ export default function Profile({ challenge }) {
                                 >
                                     <FormControl id="firstName">
                                         <FormLabel>First Name</FormLabel>
-                                        <Input onChange={e => setFname(e.target.value)} focusBorderColor="brand.blue" type="text" value={fname} />
+                                        <Input onChange={e => setFname(e.target.value)}
+                                            borderColor='yellow.500' focusBorderColor="brand.blue" type="text" value={fname} />
                                     </FormControl>
                                     <FormControl id="lastName">
                                         <FormLabel>Last Name</FormLabel>
-                                        <Input onChange={e => setLname(e.target.value)} focusBorderColor="brand.blue" type="text" value={lname} />
+                                        <Input onChange={e => setLname(e.target.value)}
+                                            borderColor='yellow.500' focusBorderColor="brand.blue" type="text" value={lname} />
                                     </FormControl>
                                     {/* <FormControl id="phoneNumber">
                                         <FormLabel>Phone Number</FormLabel>
@@ -225,11 +287,90 @@ export default function Profile({ challenge }) {
                                     <FormControl id="emailAddress">
                                         <FormLabel>Email Address</FormLabel>
                                         <Input
+                                            borderColor='yellow.500'
                                             focusBorderColor="brand.blue"
                                             type="email"
                                             value={user?.email || User?.email}
                                             disabled
                                             _disabled={{ bg: 'gray.100' }}
+                                        />
+                                    </FormControl>
+                                    <FormControl id="phone">
+                                        <FormLabel>Phone</FormLabel>
+                                        <Input
+                                            borderColor='yellow.500'
+                                            focusBorderColor="brand.blue"
+                                            type="phone"
+                                            onChange={e => setPhone(e.target.value)}
+                                        // value={user?.email || User?.email}
+                                        // disabled
+                                        // _disabled={{ bg: 'gray.100' }}
+                                        />
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel>State</FormLabel>
+                                        <ChakraSelect
+                                            borderColor='yellow.500'
+                                            size='md'
+                                            width={{ base: "100%", lg: "480px" }}
+                                            placeholder="State"
+                                            value={user?.state || User?.state}
+                                            color={"black"}
+                                            onChange={e => setState(e.target.value)}
+                                        >
+                                            {states.map((state) => (
+                                                <option key={state.name} value={state.name}>{state.name}</option>
+                                            ))}
+                                        </ChakraSelect>
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel>City</FormLabel>
+                                        <Select
+                                            styles={colourStyles}
+                                            className="basic-single"
+                                            classNamePrefix="select"
+                                            defaultValue="city"
+                                            isSearchable="true"
+                                            value={user?.city || User?.city}
+                                            options={cities}
+                                            name="cities"
+                                            onChange={e => setCity(e.value)}
+                                        />
+                                    </FormControl>
+                                    <FormControl id="age">
+                                        <FormLabel>Age</FormLabel>
+                                        <Input
+                                            borderColor='yellow.500'
+                                            focusBorderColor="brand.blue"
+                                            type="number"
+                                            value={user?.age || User?.age}
+                                            onChange={e => setAge(e.target.value)}
+                                        />
+                                    </FormControl>
+                                    <FormControl id="gender">
+                                        <FormLabel>Gender</FormLabel>
+                                        <ChakraSelect
+                                            borderColor='yellow.500'
+                                            size='md'
+                                            width={{ base: "100%", lg: "480px" }}
+                                            placeholder="Gender"
+                                            value={user?.gender || User?.gender}
+                                            color={"black"}
+                                            onChange={e => setGender(e.target.value)}
+                                        >
+                                             <option>Male</option>
+                                             <option>Female</option>
+                                         
+                                        </ChakraSelect>
+                                    </FormControl>
+                                    <FormControl id="profession">
+                                        <FormLabel>Profession</FormLabel>
+                                        <Input
+                                            borderColor='yellow.500'
+                                            focusBorderColor="brand.blue"
+                                            type="text"
+                                            value={user?.profession || User?.profession}
+                                            onChange={e => setProfession(e.target.value)}
                                         />
                                     </FormControl>
                                     {/* <FormControl id="city">
