@@ -1,14 +1,18 @@
-import { ChakraProvider, Flex, Box, Icon, Image, Button, Text, Heading, Divider } from '@chakra-ui/react'
+import { Flex, Icon, Image, Button, Text, Divider } from '@chakra-ui/react'
 import Link from 'next/link'
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
-import { LuNewspaper } from "react-icons/lu";
 import { RiContactsBookLine } from "react-icons/ri";
 import { HiOutlineHome } from "react-icons/hi";
 import { TbCloudUpload } from "react-icons/tb";
+import { UserAuth } from '@/lib/auth';
+import Router from 'next/router';
+import { useEffect, useState } from 'react';
 
 
 export default function DashBoardWrapper({ children, page }) {
+    const { user } = UserAuth();
+    const [loading, setLoading] = useState(true);
     const dashboard = page === "dashboard" ? true : false;
     const file = page === "file" ? true : false
     const news = page === "news" ? true : false
@@ -16,6 +20,12 @@ export default function DashBoardWrapper({ children, page }) {
     const profile = page === "profile" ? true : false
     const storage = page === "storage" ? true : false
 
+    useEffect(() => {
+        if (!user) {
+            Router.push('/login');
+        }
+        setLoading(false);
+    }, [user])
     return (
         <Flex
             flexDirection={{ base: "column-reverse", lg: "row" }}
@@ -70,7 +80,7 @@ export default function DashBoardWrapper({ children, page }) {
                 </Flex>
             </Flex>
             <Flex flexDirection={"column"} marginLeft={{ base: "0", lg: "250px" }} marginBottom={{ base: "50px", lg: "0" }} width={"100%"} minHeight={"100vh"} padding={{base: 6, lg:8}}>
-                {children}
+                {loading ? <h3>loading...</h3> : children}
             </Flex>
         </Flex>
     )

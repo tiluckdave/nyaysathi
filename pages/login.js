@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { RiTwitterXFill } from "react-icons/ri";
-import { supported, create, get } from "@github/webauthn-json";
+import { supported, get } from "@github/webauthn-json";
 import { PiFingerprintSimpleBold } from "react-icons/pi";
-
 import { withSessionSSR } from "../lib/session";
-
 import { UserAuth } from "@/lib/auth";
 import { useRouter } from "next/router";
 import { Button, Divider, Flex, Input, Stack, Text, Image, Heading } from "@chakra-ui/react";
@@ -14,9 +12,9 @@ import { getUser } from "@/lib/db";
 
 
 export default function Login({ challenge }) {
-    const router = useRouter();
     const [ email, setEmail ] = useState("");
-    const { user, setUser, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn } = UserAuth();
+    const router = useRouter();
+    const { user, googleSignIn, sendSignInLink, signInWithEmail, twitterSignIn } = UserAuth();
     const [ error, setError ] = useState("");
     const [ support, setSupport ] = useState(false);
 
@@ -63,7 +61,7 @@ export default function Login({ challenge }) {
             const user = await getUser(userId);
             console.log(user);
             localStorage.setItem("user", JSON.stringify(user));
-            setUser(user);
+            setUser({ ...user, role: "user" });
         }
     };
 
@@ -71,7 +69,7 @@ export default function Login({ challenge }) {
 
     function handleSignIn() {
         try {
-            googleSignIn();
+            googleSignIn("user");
         } catch (error) {
             console.log(error);
         }
@@ -79,7 +77,7 @@ export default function Login({ challenge }) {
 
     function handleTwitterSignIn() {
         try {
-            twitterSignIn();
+            twitterSignIn("user");
         }
         catch (error) {
             console.log(error);
@@ -97,7 +95,7 @@ export default function Login({ challenge }) {
 
 
     useEffect(() => {
-        signInWithEmail();
+        signInWithEmail("user");
     }, [ signInWithEmail ]);
 
     if (user) {

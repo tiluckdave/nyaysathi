@@ -1,8 +1,7 @@
 import { Flex, Heading, Text, Button } from '@chakra-ui/react'
-import { UserAuth } from "@/lib/auth";
+import Link from 'next/link';
 
 export default function Home() {
-  const { user, logOut } = UserAuth();
 
   return <Flex
     flexDirection="column"
@@ -17,15 +16,27 @@ export default function Home() {
       Empowering You with Legal Wisdom: NyaySathi - Your Trusted Digital Legal
       Companion.
     </Text>
+    <Link href="/login">
       <Button
         variant="solid"
         size="md"
         colorScheme="yellow"
         mt={6}
         fontWeight="bold"
-        onClick={logOut}
       >
-        Sign Out
+        Login
       </Button>
+    </Link>
+    <Link href="/lawyer/login">
+      <Button
+        variant="solid"
+        size="md"
+        colorScheme="yellow"
+        mt={6}
+        fontWeight="bold"
+      >
+        Login as Lawyer
+      </Button>
+    </Link>
   </Flex>
 }

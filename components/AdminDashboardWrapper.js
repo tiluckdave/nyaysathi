@@ -1,23 +1,32 @@
-import { ChakraProvider, Flex, Box, Icon, Image, Button, Text, Heading, Divider } from '@chakra-ui/react'
+import { Flex, Icon, Image, Button, Text, Divider } from '@chakra-ui/react'
 import Link from 'next/link'
-import { AiOutlineFileSearch } from "react-icons/ai";
-import { FiUser } from "react-icons/fi";
-import { LuNewspaper } from "react-icons/lu";
-import { RiContactsBookLine } from "react-icons/ri";
 import { HiOutlineHome } from "react-icons/hi";
-import { TbCloudUpload } from "react-icons/tb";
 import { FaClipboardQuestion } from "react-icons/fa6";
 import { LiaIdCard } from "react-icons/lia";
 import { FaUserCheck } from "react-icons/fa6";
-
+import { UserAuth } from '@/lib/auth';
+import Router from 'next/router';
+import { useEffect, useState } from 'react';
 
 
 
 export default function AdminDashboardWrapper({ children, page }) {
+    const { user } = UserAuth();
+
+    const [loading, setLoading] = useState(true);
     const dashboard = page === "dashboard" ? true : false;
     const question = page === "question" ? true : false
     const legalCenter = page === "legalCenter" ? true : false
     const verifyLawyer = page === "verifyLawyer" ? true : false
+
+
+    useEffect(() => {
+        if (user && user.role !== "admin") {
+            Router.push('/dashboard');
+        }
+        setLoading(false);
+    }, [user])
+
   return (
     <Flex
             flexDirection={{ base: "column-reverse", lg: "row" }}
@@ -78,7 +87,7 @@ export default function AdminDashboardWrapper({ children, page }) {
                 </Flex> */}
             </Flex>
             <Flex flexDirection={"column"} marginLeft={{ base: "0", lg: "250px" }} marginBottom={{ base: "50px", lg: "0" }} width={"100%"} minHeight={"100vh"} padding={8}>
-                {children}
+                {loading ? <h1>Loading...</h1> : children}
             </Flex>
         </Flex>
   )

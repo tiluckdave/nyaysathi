@@ -1,7 +1,6 @@
 import { Button, Flex, Icon, Text, Textarea } from '@chakra-ui/react'
 import { useState } from 'react'
 import { IoSend } from "react-icons/io5";
-import { RiAiGenerate } from "react-icons/ri";
 
 export default function AskQuery() {
     const [ loading, setLoading ] = useState(false)
