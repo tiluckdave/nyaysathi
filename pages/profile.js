@@ -4,6 +4,7 @@ import { UserAuth } from "@/lib/auth";
 import { useRouter } from "next/router";
 // import { Button } from "@chakra-ui/react";
 import { PiFingerprintSimpleBold } from "react-icons/pi";
+import { FaQ } from "react-icons/fa6";
 import { supported, create } from "@github/webauthn-json";
 import { generateChallenge } from "@/lib/utils";
 import { withSessionSSR } from "@/lib/session";
@@ -31,27 +32,30 @@ import {
     Box,
     HStack,
     Grid,
-    Select as ChakraSelect
+    Select as ChakraSelect,
+    useToast,
+    Icon
 } from '@chakra-ui/react'
+import Link from "next/link";
+import { LuNewspaper } from "react-icons/lu";
 
 
 export default function Profile({ challenge }) {
+    const toast = useToast();
     const router = useRouter();
     const { user } = UserAuth();
-    const [User, SetUser] = useState(null);
-
-    const [support, setSupport] = useState(false);
-    const [error, setError] = useState(null);
-
-    const [fname, setFname] = useState("");
-    const [lname, setLname] = useState("");
-    const [state, setState] = useState("");
-    const [phone, setPhone] = useState("");
-    const [city, setCity] = useState("");
-    const [age,setAge] = useState("");
-    const [gender ,setGender] = useState("");
-    const [profession ,setProfession] = useState("");
-    const [cities, setCities] = useState([])
+    const [ User, SetUser ] = useState(null);
+    const [ support, setSupport ] = useState(false);
+    const [ error, setError ] = useState(null);
+    const [ fname, setFname ] = useState("");
+    const [ lname, setLname ] = useState("");
+    const [ state, setState ] = useState("");
+    const [ phone, setPhone ] = useState("");
+    const [ city, setCity ] = useState();
+    const [ age, setAge ] = useState("");
+    const [ gender, setGender ] = useState("");
+    const [ profession, setProfession ] = useState("");
+    const [ cities, setCities ] = useState([])
     const colourStyles = {
         control: (styles) => ({
             ...styles, width: '480px', '@media (max-width: 992px)': {
@@ -86,7 +90,7 @@ export default function Profile({ challenge }) {
                     name: user?.email,
                     displayName: user?.displayName,
                 },
-                pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+                pubKeyCredParams: [ { alg: -7, type: "public-key" } ],
                 timeout: 60000,
                 attestation: "direct",
                 authenticatorSelection: {
@@ -118,17 +122,22 @@ export default function Profile({ challenge }) {
 
     const updateProfile = () => {
         const name = fname + " " + lname;
-        const updatedUser = updateDetailsDB(user?.uid || User?.uid, name ,phone,state,city,age,gender,profession)
-        if (updatedUser.name === name) {
-            console.log("User Updated Succesfully in UI")
-        }
+        updateDetailsDB(user?.uid || User?.uid, name, phone, state, city, age, gender, profession)
+        toast({
+            title: "Profile Updated.",
+            description: "Your profile has been updated successfully.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "top"
+        })
     }
 
     useEffect(() => {
         if (localStorage.getItem("user")) {
             SetUser(JSON.parse(localStorage.getItem("user")));
         }
-    }, [SetUser, User]);
+    }, [ SetUser, User ]);
 
     useEffect(() => {
         const checkAvailability = async () => {
@@ -141,13 +150,26 @@ export default function Profile({ challenge }) {
 
     useEffect(() => {
         if (user || User) {
-            setFname((user?.displayName)?.split(" ")[0] || (User?.name)?.split(" ")[0])
-            setLname((user?.displayName)?.split(" ")[1] || (User?.name)?.split(" ")[1])
+            setFname((user?.name)?.split(" ")[ 0 ] || (User?.name)?.split(" ")[ 0 ])
+            setLname((user?.name)?.split(" ")[ 1 ] || (User?.name)?.split(" ")[ 1 ])
         }
-    }, [User, setFname, setLname, user]);
+    }, [ User, setFname, setLname, user ]);
 
 
     //get cities api
+
+
+    useEffect(() => {
+        setAge(user?.age || User?.age)
+        setState(user?.state || User?.state)
+        setCity(user?.city || User?.city)
+        setPhone(user?.phone || User?.phone)
+        setProfession(user?.profession || User?.profession)
+        setGender(user?.gender || User?.gender)
+        setFname((user?.name)?.split(" ")[ 0 ] || (User?.name)?.split(" ")[ 0 ])
+        setLname((user?.name)?.split(" ")[ 1 ] || (User?.name)?.split(" ")[ 1 ])
+    }, [ User, setFname, setLname, user ]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -174,11 +196,13 @@ export default function Profile({ challenge }) {
         };
 
         fetchData();
-    }, [state]);
+    }, [ state ]);
 
 
 
-    if (user || User) { }
+    if (user || User) {
+        console.log(user)
+    }
     else {
         return (
             <DashBoardWrapper page="profile">
@@ -189,23 +213,17 @@ export default function Profile({ challenge }) {
 
     return (
         <DashBoardWrapper page="profile">
-            <Flex gap={2} mt={"40"} flexDirection="column" maxW="container.lg">
+            <Flex gap={2} flexDirection="column" maxW="container.lg">
                 <Box
-                    as="aside"
                     flex={1}
-                    mr={{ base: 0, md: 5 }}
-                    mb={{ base: 5, md: 0 }}
                     bg="white"
                     rounded="md"
                     borderWidth={1}
                     borderColor="brand.light"
-                    style={{ transform: 'translateY(-100px)' }}
                     boxShadow={"lg"}
                     width={"100%"}
                 >
-
-
-                    <HStack spacing={2} py={5} justifyContent={"space-around"} borderBottomWidth={1} borderColor="brand.light">
+                    <HStack spacing={2} py={5} justifyContent={"space-around"} flexDirection={{ base: "column", lg: "row" }} borderBottomWidth={1} borderColor="brand.light">
                         <Avatar
                             size="2xl"
                             name="Tim Cook"
@@ -215,7 +233,7 @@ export default function Profile({ challenge }) {
                         </Avatar>
                         <VStack spacing={1}>
                             <Heading as="h3" fontSize="xl" color="brand.dark">
-                                {user?.displayName || User?.name}
+                                {user?.name || User?.name}
                             </Heading>
                             <Text color="brand.gray" fontSize="sm">
                                 {user?.email || User?.email}
@@ -237,7 +255,6 @@ export default function Profile({ challenge }) {
                     rounded="md"
                     borderWidth={1}
                     borderColor="gray.200"
-                    style={{ transform: 'translateY(-100px)' }}
                     boxShadow={"lg"}
 
                 >
@@ -302,9 +319,7 @@ export default function Profile({ challenge }) {
                                             focusBorderColor="brand.blue"
                                             type="phone"
                                             onChange={e => setPhone(e.target.value)}
-                                        // value={user?.email || User?.email}
-                                        // disabled
-                                        // _disabled={{ bg: 'gray.100' }}
+                                            value={phone}
                                         />
                                     </FormControl>
                                     <FormControl>
@@ -314,7 +329,7 @@ export default function Profile({ challenge }) {
                                             size='md'
                                             width={{ base: "100%", lg: "480px" }}
                                             placeholder="State"
-                                            value={user?.state || User?.state}
+                                            value={state}
                                             color={"black"}
                                             onChange={e => setState(e.target.value)}
                                         >
@@ -329,9 +344,8 @@ export default function Profile({ challenge }) {
                                             styles={colourStyles}
                                             className="basic-single"
                                             classNamePrefix="select"
-                                            defaultValue="city"
                                             isSearchable="true"
-                                            value={user?.city || User?.city}
+                                            defaultValue={{ label: city, value: city }}
                                             options={cities}
                                             name="cities"
                                             onChange={e => setCity(e.value)}
@@ -343,7 +357,7 @@ export default function Profile({ challenge }) {
                                             borderColor='yellow.500'
                                             focusBorderColor="brand.blue"
                                             type="number"
-                                            value={user?.age || User?.age}
+                                            value={age}
                                             onChange={e => setAge(e.target.value)}
                                         />
                                     </FormControl>
@@ -354,13 +368,13 @@ export default function Profile({ challenge }) {
                                             size='md'
                                             width={{ base: "100%", lg: "480px" }}
                                             placeholder="Gender"
-                                            value={user?.gender || User?.gender}
+                                            value={gender}
                                             color={"black"}
                                             onChange={e => setGender(e.target.value)}
                                         >
-                                             <option>Male</option>
-                                             <option>Female</option>
-                                         
+                                            <option key="Male" value="Male">Male</option>
+                                            <option key="Female" value="Female">Female</option>
+                                            <option key="Other" value="Other">Other</option>
                                         </ChakraSelect>
                                     </FormControl>
                                     <FormControl id="profession">
@@ -369,7 +383,7 @@ export default function Profile({ challenge }) {
                                             borderColor='yellow.500'
                                             focusBorderColor="brand.blue"
                                             type="text"
-                                            value={user?.profession || User?.profession}
+                                            value={profession}
                                             onChange={e => setProfession(e.target.value)}
                                         />
                                     </FormControl>
@@ -415,6 +429,21 @@ export default function Profile({ challenge }) {
                         </HStack>
                     </Box>
                 </Box>
+                <Flex flexDirection={"column"} mt="6" display={{ base: "flex", lg: "none" }} gap="3">
+                    <Text fontWeight={"bold"} fontSize={"xl"}>Other Pages</Text>
+                    <Link href="/news">
+                        <Button colorScheme='gray' bg={"gray.200"} padding={2} rounded={4} alignItems={"center"} justifyContent="flex-start" width="100%" size={"lg"}>
+                            <Icon boxSize={5} as={LuNewspaper} />
+                            <Text marginLeft={3}>New & Updates</Text>
+                        </Button>
+                    </Link>
+                    <Link href="/faqs">
+                        <Button colorScheme='gray' bg={"gray.200"} padding={2} rounded={4} alignItems={"center"} justifyContent="flex-start" width="100%" size={"lg"}>
+                            <Icon boxSize={5} as={FaQ} />
+                            <Text marginLeft={3}>FAQs</Text>
+                        </Button>
+                    </Link>
+                </Flex>
             </Flex>
         </DashBoardWrapper>
     )

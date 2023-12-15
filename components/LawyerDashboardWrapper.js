@@ -2,23 +2,11 @@ import { Flex, Icon, Image, Button, Text, Divider } from '@chakra-ui/react'
 import Link from 'next/link'
 import { FiUser } from "react-icons/fi";
 import { HiOutlineHome } from "react-icons/hi";
-import { UserAuth } from '@/lib/auth';
-import Router from 'next/router';
-import { useEffect, useState } from 'react';
 
 
 export default function LawyerDashboardWrapper({ children, page }) {
-    const { user } = UserAuth();
-    const [loading, setLoading] = useState(true);
     const dashboard = page === "dashboard" ? true : false;
     const profile = page === "profile" ? true : false;
-
-    useEffect(() => {
-        if (user && user.role !== "lawyer") {
-            Router.push('/dashboard');
-        }
-        setLoading(false);
-    }, [user])
 
     return (
         <Flex
@@ -52,7 +40,7 @@ export default function LawyerDashboardWrapper({ children, page }) {
                 </Flex>
             </Flex>
             <Flex flexDirection={"column"} marginLeft={{ base: "0", lg: "250px" }} marginBottom={{ base: "50px", lg: "0" }} width={"100%"} minHeight={"100vh"} padding={8}>
-                {loading ? <h3>loading...</h3> : children}
+                {children}
             </Flex>
         </Flex>
     )

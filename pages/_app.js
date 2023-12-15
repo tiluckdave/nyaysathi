@@ -1,4 +1,4 @@
-import { AuthContextProvider } from '@/lib/auth'
+import { AuthProvider } from '@/lib/auth'
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
 
@@ -15,10 +15,10 @@ export const theme = extendTheme({ colors })
 
 export default function App({ Component, pageProps }) {
   return (
-    <AuthContextProvider>
-        <ChakraProvider>
-          <Component {...pageProps} />
-        </ChakraProvider>
-    </AuthContextProvider>
+    <AuthProvider>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </AuthProvider>
   )
 }
