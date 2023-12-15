@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { RiTwitterXFill } from "react-icons/ri";
 import { UserAuth } from "@/lib/auth";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import { Button, Divider, Flex, Input, Stack, Text, Image, Heading } from "@chakra-ui/react";
 
 export default function Login() {
@@ -46,7 +46,10 @@ export default function Login() {
     return (
         <Flex bg={"gray.100"} height={"100vh"} >
             <Flex display={{ base: "none", lg: "flex" }} justifyContent={"space-between"} width={"40%"} bg="gray.700" padding="30px" flexDirection={"column"}>
-                <Image src="/icon-black.svg" alt="Logo" width="100px" />
+                <Flex flexDirection={"row"} justifyContent={"space-between"} alignItems={"flex-start"} gap="4">
+                    <Image src="/icon-black.svg" alt="Logo" width="100px" />
+                    <Image src="/india.svg" alt="India" width="50px" />
+                </Flex>
                 <Heading fontSize={"5xl"} color={"white"} mb="20">Join & Contribute to NyaySathi as a Lawyer</Heading>
                 <Text color={"gray.200"}>© 2023 Nyay Sathi. All rights reserved.</Text>
             </Flex>

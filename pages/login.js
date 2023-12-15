@@ -105,7 +105,10 @@ export default function Login({ challenge }) {
     return (
         <Flex bg={"gray.100"} height={"100vh"} >
             <Flex display={{ base: "none", lg: "flex" }} justifyContent={"space-between"} width={"40%"} bg="gray.700" padding="30px" flexDirection={"column"}>
-                <Image src="/icon-black.svg" alt="Logo" width="100px" />
+                <Flex flexDirection={"row"} justifyContent={"space-between"} alignItems={"flex-start"} gap="4">
+                    <Image src="/icon-black.svg" alt="Logo" width="100px" />
+                    <Image src="/india.svg" alt="India" width="50px" />
+                </Flex>
                 <Heading fontSize={"5xl"} color={"white"} mb="20">We&apos;re Here to Simplify the Complexities of Law</Heading>
                 <Text color={"gray.200"}>© 2023 Nyay Sathi. All rights reserved.</Text>
             </Flex>
