@@ -1,6 +1,7 @@
 import DashBoardWrapper from "@/components/DashBoardWrapper";
 import AskQuery from "@/components/AskQuery";
 import ChatLegal from "@/components/ChatLegal";
+import KYR from "@/components/KYR";
 import { Flex, Heading, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 export default function Home() {
@@ -11,12 +12,16 @@ export default function Home() {
                     <Heading fontSize="3xl">AI Legal Assistant</Heading>
                     <TabList width={{base: "100%", lg: "45%"}} mt={{base: 4, lg: 0}} bg={"gray.50"} rounded="full">
                         <Tab>Ask</Tab>
+                        <Tab>KYR</Tab>
                         <Tab>Chat</Tab>
                     </TabList>
                 </Flex>
                 <TabPanels>
                     <TabPanel padding={"0"}>
                         <AskQuery />
+                    </TabPanel>
+                    <TabPanel padding={"0"}>
+                        <KYR />
                     </TabPanel>
                     <TabPanel padding={"0"}>
                         <ChatLegal />
