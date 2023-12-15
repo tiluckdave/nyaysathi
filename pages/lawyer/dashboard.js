@@ -1,9 +1,10 @@
 import LawyerDashboardWrapper from "@/components/LawyerDashboardWrapper";
+import { Heading } from "@chakra-ui/react";
 
 export default function Dashboard() {
     return (
         <LawyerDashboardWrapper page="dashboard">
-            <h1>Hello Lawyer</h1>
+            <Heading fontSize="3xl">Lawyer Dashboard</Heading>
         </LawyerDashboardWrapper>
     )
 }

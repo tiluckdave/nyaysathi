@@ -1,45 +1,38 @@
-
-
 import {
-    ChakraProvider,
-    CSSReset,
     Box,
     Button,
-    Input,
     Modal,
     ModalOverlay,
     ModalContent,
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton,
     FormControl,
     FormLabel,
     RadioGroup,
     Stack,
     Radio,
     useToast,
-    Heading,
     Icon,
     useDisclosure,
-    MotionBox,
-    Flex,
 } from "@chakra-ui/react";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import DashBoardWrapper from "@/components/DashBoardWrapper";
-import { getRandomQuestion } from "@/lib/db";
+import { getRandomQuestion, updateQOTD } from "@/lib/db";
+import { UserAuth } from "@/lib/auth";
 
 export default function Quiz() {
-
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { user, setUser } = UserAuth();
+    const [ qotd, setQOTD ] = useState();
     const router = useRouter();
-    const [selectedAnswer, setSelectedAnswer] = useState("");
+    const [ selectedAnswer, setSelectedAnswer ] = useState("");
     const toast = useToast();
-    const [question, setQuestions] = useState("");
-    const [options, setOptions] = useState([]);
-    const [correct, setCorrect] = useState("");
+    const [ question, setQuestions ] = useState("");
+    const [ options, setOptions ] = useState([]);
+    const [ correct, setCorrect ] = useState("");
 
 
     const handleSubmit = () => {
@@ -64,6 +57,8 @@ export default function Quiz() {
                 position: 'top',
             });
         }
+        setUser({ ...user, qotd: true });
+        updateQOTD(user.uid);
     };
 
     const handleCancel = () => {
@@ -76,9 +71,13 @@ export default function Quiz() {
         setOptions(questionDb.options);
         setCorrect(questionDb.correct);
     }
+
     useEffect(() => {
+        setQOTD(user?.qotd);
         questionPrompt();
-    }, []);
+    }, [ user ]);
+
+
     return (
         <DashBoardWrapper>
             <Modal isOpen={true} size="full" isCentered >
@@ -93,7 +92,6 @@ export default function Quiz() {
                     >
                         Question of the Day
                     </ModalHeader>
-                    <ModalCloseButton />
                     <ModalBody bg={"gray.200"}>
                         <Box >
                             <FormControl>
@@ -139,9 +137,7 @@ export default function Quiz() {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-
         </DashBoardWrapper>
     )
-
 }
 

@@ -16,7 +16,7 @@ import { FaQ } from 'react-icons/fa6';
 
 export default function DashBoardWrapper({ children, page }) {
     const { user } = UserAuth();
-    const [ loading, setLoading ] = useState(true);
+    const [ loading, setLoading ] = useState(false);
     const dashboard = page === "dashboard" ? true : false;
     const file = page === "file" ? true : false
     const news = page === "news" ? true : false
@@ -33,6 +33,7 @@ export default function DashBoardWrapper({ children, page }) {
         }
         setLoading(false);
     }, [ user ])
+
     return (
         <Flex
             flexDirection={{ base: "column-reverse", lg: "row" }}
