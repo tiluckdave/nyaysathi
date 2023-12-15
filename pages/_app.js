@@ -16,9 +16,9 @@ export const theme = extendTheme({ colors })
 export default function App({ Component, pageProps }) {
   return (
     <AuthContextProvider>
-      <ChakraProvider>
-        <Component {...pageProps} />
-      </ChakraProvider>
+        <ChakraProvider>
+          <Component {...pageProps} />
+        </ChakraProvider>
     </AuthContextProvider>
   )
 }
