@@ -8,6 +8,9 @@ import { TbCloudUpload } from "react-icons/tb";
 import { UserAuth } from '@/lib/auth';
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
+import { LuLogOut } from "react-icons/lu";
+
+
 
 
 export default function DashBoardWrapper({ children, page }) {
@@ -19,6 +22,8 @@ export default function DashBoardWrapper({ children, page }) {
     const aid = page === "aid" ? true : false
     const profile = page === "profile" ? true : false
     const storage = page === "storage" ? true : false
+
+    const {logOut} = UserAuth();
 
     useEffect(() => {
         if (!user) {
@@ -70,13 +75,17 @@ export default function DashBoardWrapper({ children, page }) {
                     </Link> */}
                 </Flex>
 
-                <Flex flexDirection={{base:"row", lg: "column"}} gap={4} width={{base:"20%", lg:"100%"}}>
+                <Flex flexDirection={{base:"row", lg: "row"}} justifyContent={"space-between"} gap={4} width={{base:"20%", lg:"100%"}}>
                     <Link href="/profile" width={{base: "0", lg: "100%"}}>
                         <Button colorScheme='gray' bg={profile && "gray.200"} padding={2} rounded={{base: "full", lg:4}} alignItems={"center"} justifyContent="flex-start" width={{base: "auto", lg: "100%"}} >
                             <Icon boxSize={{base:7, lg:5}} as={FiUser} />
                             <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Profile</Text>
                         </Button>
                     </Link>
+                    <Button colorScheme='gray' bg={profile && "gray.200"} padding={2} rounded={{base: "full", lg:4}} alignItems={"center"} justifyContent="flex-start" onClick={logOut} >
+                            <Icon boxSize={{base:7, lg:5}} as={LuLogOut} />
+                            {/* <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Profile</Text> */}
+                        </Button>
                 </Flex>
             </Flex>
             <Flex flexDirection={"column"} marginLeft={{ base: "0", lg: "250px" }} marginBottom={{ base: "50px", lg: "0" }} width={"100%"} minHeight={"100vh"} padding={{base: 6, lg:8}}>
