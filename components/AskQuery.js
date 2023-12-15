@@ -1,4 +1,5 @@
 import { Button, Flex, Icon, Text, Textarea } from '@chakra-ui/react'
+import Link from 'next/link';
 import { useState } from 'react'
 import { IoSend } from "react-icons/io5";
 
@@ -6,8 +7,10 @@ export default function AskQuery() {
     const [ loading, setLoading ] = useState(false)
     const [ userInput, setUserInput ] = useState(null)
     const [ apiOutput, setApiOutput ] = useState(null)
+    const [ idk, setIdk ] = useState(false)
 
     const askSathi = () => {
+        setIdk(false)
         setLoading(true)
         const endpoint = 'https://nyaysathi.replit.app/ask';
         const requestData = {
@@ -27,6 +30,10 @@ export default function AskQuery() {
             return response.json();
         }).then(responseData => {
             console.log(responseData);
+            // responseData.answer find string "I am not sure about this"
+            if (responseData.answer.includes("I am not sure about this")) {
+                setIdk(true)
+            }
             setApiOutput(responseData.answer)
             setLoading(false)
         }).catch(error => {
@@ -48,7 +55,12 @@ export default function AskQuery() {
                 {loading && <Text fontStyle={"italic"} fontWeight={"bold"}>NyaySathi is Thinking...</Text>}
                 {!loading && apiOutput && <Flex flexDirection={"column"}>
                     <Text fontWeight={"bold"}>NyaySathi</Text>
-                    <Text>{apiOutput}</Text>
+                    {!idk && <Text>{apiOutput}</Text>}
+                    {idk && <Flex flexDir={"column"} gap="4">
+                        <Text>I am still learning and very sorry to say but I do not have proper knowledge to answer your question. Just to be extra sure can you recheck your question.</Text>
+                        <Text>I have a link to the source where you might find information relevant with your query.</Text>
+                        <Link href="https://www.indiankanoon.org/" passHref={true}><Button as="a" colorScheme='yellow' size={{ base: "sm", lg: "md" }} rounded="lg" >Indian Kanoon</Button></Link>
+                    </Flex>}
                 </Flex>}
             </Flex>
 
