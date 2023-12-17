@@ -30,7 +30,7 @@ import axios from "axios";
 import { FaUserEdit } from "react-icons/fa";
 import { updateLawyerDetailsDB } from "@/lib/db";
 
-export default function profile({ challenge }) {
+export default function Profile({ challenge }) {
 const { user } = UserAuth();
 const [ fname, setFname ] = useState("");
 const [ lname, setLname ] = useState("");
