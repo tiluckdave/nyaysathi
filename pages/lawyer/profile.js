@@ -69,7 +69,7 @@ const colourStyles = {
 
 const updateProfile = () => {
     const name = fname + " " + lname;
-    updateLawyerDetailsDB(user?.uid, name, phone, state, city, age, gender,lawyerNo,degree,description,specialization,experience,fees );
+    updateLawyerDetailsDB(user?.uid + user?.email, name, phone, state, city, age, gender,lawyerNo,degree,description,experience,fees );
     toast({
         title: "Profile Updated.",
         description: "Your profile has been updated successfully.",
