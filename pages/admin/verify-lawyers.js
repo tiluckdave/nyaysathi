@@ -10,22 +10,23 @@ import {
     Td,
     TableCaption,
     TableContainer,
+    useToast,
 } from '@chakra-ui/react'
 import { getPendingLawyers, VerifyLawyer, deleteLawyer } from "@/lib/db";
 import { useEffect, useState } from "react";
 
 export default function VerifyLawyers() {
     const [ lawyers, setLawyers ] = useState([]);
+    const toast = useToast();
 
-    const handleApprove = async (lawyerUid) => {
-        await VerifyLawyer(lawyerUid);
-        getAllLawyers();
+    function handleApprove(index) {
+        console.log(index)
     }
 
-    const handleReject = async (lawyerUid) => {
-        await deleteLawyer(lawyerUid);
-        getAllLawyers();
+    function handleReject(index) {
+        console.log(index)
     }
+    
 
     const getAllLawyers = async () => {
         const lawyers = await getPendingLawyers();
@@ -54,16 +55,16 @@ export default function VerifyLawyers() {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {lawyers && lawyers.map((lawyer) => (
-                            <Tr key={lawyer.uid}>
+                        {lawyers && lawyers.map((lawyer, index) => (
+                            <Tr key={index}>
                                 <Td>{lawyer.lawyerNumber}</Td>
                                 <Td>{lawyer.name}</Td>
                                 <Td>{lawyer.degree}</Td>
                                 <Td>{lawyer.experience}</Td>
                                 <Td>
-                                    <Button colorScheme='green' onClick={handleApprove(lawyer.uid)}>Approve</Button>
-                                    <Button colorScheme='red' onClick={handleReject(lawyer.uid)}>Reject</Button>
-                                </Td>
+                                    <Button colorScheme='green'>Approve</Button>
+                                    <Button colorScheme='red'>Reject</Button>
+                                </Td> 
                             </Tr>
                         ))}
                     </Tbody>
