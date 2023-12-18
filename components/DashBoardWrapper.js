@@ -4,6 +4,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
 import { RiContactsBookLine } from "react-icons/ri";
 import { HiOutlineHome } from "react-icons/hi";
+import { GrChat } from "react-icons/gr";
 import { TbCloudUpload } from "react-icons/tb";
 import { UserAuth } from '@/lib/auth';
 import Router from 'next/router';
@@ -24,6 +25,7 @@ export default function DashBoardWrapper({ children, page }) {
     const profile = page === "profile" ? true : false
     const storage = page === "storage" ? true : false
     const faqs = page === "faqs" ? true : false
+    const chatLawyer = page === "chatLawyer" ? true : false
 
     const { logOut } = UserAuth();
 
@@ -83,6 +85,14 @@ export default function DashBoardWrapper({ children, page }) {
                             <Button colorScheme='gray' bg={faqs && "gray.200"} padding={2} rounded={{ base: "full", lg: 4 }} alignItems={"center"} justifyContent="flex-start" width="100%">
                                 <Icon boxSize={{ base: 7, lg: 5 }} as={FaQ} />
                                 <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>FAQs</Text>
+                            </Button>
+                        </Link>
+                    </Box>
+                    <Box display={{ base: "none", lg: "block" }}>
+                        <Link href="/chat-with-lawyer" width="100%">
+                            <Button colorScheme='gray' bg={faqs && "gray.200"} padding={2} rounded={{ base: "full", lg: 4 }} alignItems={"center"} justifyContent="flex-start" width="100%">
+                                <Icon boxSize={{ base: 7, lg: 5 }} as={GrChat} />
+                                <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Chat with Lawyers</Text>
                             </Button>
                         </Link>
                     </Box>
