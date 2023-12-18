@@ -43,9 +43,18 @@ const [age,setAge] = useState("");
 const [gender,setGender] = useState("");
 const[degree,setDegree] = useState("");
 const[description,setDescription] = useState("");
-const[specialization,setSpecialization] = useState("");
+const[specialization,setSpecialization] = useState([]);
 const[experience,setExperience] = useState("");
 const[fees,setFees] = useState("");
+
+const specializations = [
+    {"value": "Civil Law", "label": "Civil Law" },
+    {"value": "Criminal Law", "label": "Criminal Law" },
+    {"value": "Statutory Law", "label": "Statutory Law" },
+    {"value": "Criminal Law", "label": "Criminal Law" },
+    {"value": "Cyber Law", "label": "Cyber Law" },
+    {"value": "Common Law", "label": "Common Law" }
+]
 
 const toast = useToast();
 
@@ -69,7 +78,7 @@ const colourStyles = {
 
 const updateProfile = () => {
     const name = fname + " " + lname;
-    updateLawyerDetailsDB(user?.uid + user?.email, name, phone, state, city, age, gender,lawyerNo,degree,description,experience,fees );
+    updateLawyerDetailsDB(user?.uid + user?.email, name, phone, state, city, age, gender,lawyerNo,degree,description,specialization,experience,fees );
     toast({
         title: "Profile Updated.",
         description: "Your profile has been updated successfully.",
@@ -329,7 +338,21 @@ useEffect(() => {
                                             onChange={e => setDescription(e.target.value)}
                                         />
                                     </FormControl>
-                                    <FormControl id="specialization">
+                                    <FormControl>
+                                        <FormLabel>Specialization</FormLabel>
+                                        <Select
+                                            styles={colourStyles}
+                                            className="basic-single"
+                                            classNamePrefix="select"
+                                            isSearchable="true"
+                                            isMulti
+                                            // defaultValue={{ label: specialization, value: specialization }}
+                                            options={specializations}
+                                            name="specialization"
+                                            onChange={(selectedOptions) => setSpecialization(selectedOptions.map(option => option.value))}
+                                        />
+                                    </FormControl>
+                                    {/* <FormControl id="specialization">
                                         <FormLabel>Specialization</FormLabel>
                                         <Input
                                             borderColor='yellow.500'
@@ -338,7 +361,7 @@ useEffect(() => {
                                             value={specialization}
                                             onChange={e => setSpecialization(e.target.value)}
                                         />
-                                    </FormControl>
+                                    </FormControl> */}
                                     <FormControl id="experience">
                                         <FormLabel>Experience</FormLabel>
                                         <Input
