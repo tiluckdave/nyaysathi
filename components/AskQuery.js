@@ -1,5 +1,5 @@
 import {
-  Button,
+  Button, Divider,
   Flex,
   Icon,
   Text,
@@ -13,25 +13,26 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { IoSend } from "react-icons/io5";
+import { IoMdThumbsUp, IoMdThumbsDown } from "react-icons/io";
 import { UserAuth } from "@/lib/auth";
 import { getLawyer } from "@/lib/db";
 
 export default function AskQuery() {
   const { user } = UserAuth();
-  const [loading, setLoading] = useState(false);
-  const [userInput, setUserInput] = useState(null);
-  const [apiOutput, setApiOutput] = useState(null);
-  const [specs, setSpecs] = useState([]);
-  const [sourceDocs, setSourceDocs] = useState([]);
-  const [lawyers, setLawyers] = useState([]);
-  const [idk, setIdk] = useState(false);
+  const [ loading, setLoading ] = useState(false);
+  const [ userInput, setUserInput ] = useState(null);
+  const [ apiOutput, setApiOutput ] = useState(null);
+  const [ specs, setSpecs ] = useState([]);
+  const [ sourceDocs, setSourceDocs ] = useState([]);
+  const [ lawyers, setLawyers ] = useState([]);
+  const [ idk, setIdk ] = useState(false);
 
   const askSathi = async () => {
     try {
       setIdk(false);
       setLoading(true);
       const endpoint = 'https://nyaysathi.replit.app/ask';
-    //   const endpoint = "http://localhost:5000/ask";
+      //   const endpoint = "http://localhost:5000/ask";
       const requestData = {
         question: userInput,
       };
@@ -65,6 +66,43 @@ export default function AskQuery() {
     }
   };
 
+  const reaskSathi = async () => {
+    try {
+      setIdk(false);
+      setLoading(true);
+      const endpoint = 'https://nyaysathi.replit.app/reask';
+      const requestData = {
+        question: userInput,
+        response: apiOutput,
+        docs: sourceDocs,
+      };
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+
+      const responseData = await response.json();
+      console.log(responseData);
+
+      if (responseData.answer.includes("I am not sure about this")) {
+        setIdk(true);
+      }
+
+      setApiOutput(responseData.answer);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+
   useEffect(() => {
     console.log("Specs:", specs);
     console.log(user);
@@ -81,7 +119,7 @@ export default function AskQuery() {
     };
 
     fetchData();
-  }, [specs, user]);
+  }, [ specs, user ]);
 
   return (
     <Flex flexDirection={"column"} gap={6}>
@@ -167,17 +205,15 @@ export default function AskQuery() {
               </Text>
             )}
             <Stack direction="row">
-              {!idk &&
-                sourceDocs.length > 0 &&
-                sourceDocs.map((doc) => (
-                  <Link
-                    href={`https://storage.googleapis.com/nyaysathi.appspot.com/${doc}.txt`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Badge colorScheme="purple">{doc}.txt</Badge>
-                  </Link>
-                ))}
+              {!idk && sourceDocs.length > 0 && sourceDocs.map((doc) => (
+                <Link key={doc}
+                  href={`https://storage.googleapis.com/nyaysathi.appspot.com/${doc}.txt`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Badge colorScheme="purple">{doc}.txt</Badge>
+                </Link>
+              ))}
             </Stack>
             {lawyers && (
               <Text mt={10} fontWeight={"bold"}>
@@ -185,10 +221,10 @@ export default function AskQuery() {
                 case:
               </Text>
             )}
-            <SimpleGrid columns={{base: 1, lg: 3}} gridGap={4} mt={4}>
+            <SimpleGrid columns={{ base: 1, lg: 3 }} gridGap={4} mt={4}>
               {!idk &&
                 lawyers.map((lawyer) => (
-                    <Flex direction="row" align="start" bg={"white"} boxShadow={"lg"} border="1px"
+                  <Flex key={lawyer.uid} direction="row" align="start" bg={"white"} boxShadow={"lg"} border="1px"
                     borderColor="gray.100" p={3} rounded={10} gap={2}>
                     <Avatar name='Dan Abrahmov' src={lawyer.photoURL} />
                     <Flex flexDir="column">
@@ -197,11 +233,15 @@ export default function AskQuery() {
                       </Text>
                       <Text color={"gray.500"} fontSize={"xs"}>{lawyer.email} | {lawyer.phone}</Text>
                     </Flex>
-                    </Flex>
+                  </Flex>
                 ))}
             </SimpleGrid>
           </Flex>
         )}
+        {!loading && apiOutput && <Flex justifyContent={"center"} alignItems={"center"} gap={3}>
+          <Text fontWeight={"medium"} >Are you satisfied?</Text>
+          <Button size={"sm"} colorScheme={"blackAlpha"} onClick={reaskSathi}><Icon as={IoMdThumbsDown} /></Button>
+        </Flex>}
       </Flex>
     </Flex>
   );
