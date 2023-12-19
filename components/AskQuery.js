@@ -1,7 +1,8 @@
-import { Button, Flex, Icon, Text, Textarea } from '@chakra-ui/react'
+import { Button, Divider, Flex, Icon, Text, Textarea } from '@chakra-ui/react'
 import Link from 'next/link';
 import { useState,useEffect } from 'react'
 import { IoSend } from "react-icons/io5";
+import { IoMdThumbsUp, IoMdThumbsDown } from "react-icons/io";
 import { UserAuth } from '@/lib/auth';
 import { getLawyer } from '@/lib/db';
 
@@ -44,6 +45,43 @@ export default function AskQuery() {
       
           setApiOutput(responseData.answer);
           setSpecs(responseData.specs);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error:', error.message);
+        }
+      };
+
+      const reaskSathi = async () => {
+        try {
+          setIdk(false);
+          setLoading(true);
+          const endpoint = 'https://nyaysathi.replit.app/reask';
+          const requestData = {
+            question: userInput,
+            response: apiOutput,
+            docs: docs,
+          };
+      
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+      
+          const responseData = await response.json();
+          console.log(responseData);
+      
+          if (responseData.answer.includes("I am not sure about this")) {
+            setIdk(true);
+          }
+      
+          setApiOutput(responseData.answer);
           setLoading(false);
         } catch (error) {
           console.error('Error:', error.message);
@@ -97,6 +135,10 @@ export default function AskQuery() {
                         <Link href="https://www.indiankanoon.org/" passHref={true}><Button as="a" colorScheme='yellow' size={{ base: "sm", lg: "md" }} rounded="lg" >Indian Kanoon</Button></Link>
                     </Flex>}
                 </Flex>}
+                {!loading && apiOutput && <Flex gap={2} justifyContent={"center"} alignItems={"center"}>
+                    <Text fontWeight={"medium"}>Are you satisfied?</Text>
+                    <Button colorScheme='blackAlpha' rounded={10} size="sm" onClick={reaskSathi}><Icon as={IoMdThumbsDown} boxSize={5}/></Button>
+                  </Flex>}
             </Flex>
 
         </Flex>
