@@ -40,6 +40,7 @@ export default function AddCenter() {
 
     const handleSubmit = () => {
         // Add your logic to handle the submission of the form
+        const copyData = [...data];
         console.log('Submitted:', { title, city, state, address, phone, locationURL });
         createCenter(title,city,state,address,phone,locationURL);
         toast({
@@ -49,8 +50,9 @@ export default function AddCenter() {
             duration: 3000,
             isClosable: true,
             position: 'top',
-
         });
+        copyData.push({title:title,city:city,address:address,phone:phone,locationURL:locationURL})
+        setData(copyData);
         handleCloseModal();
     };
 
@@ -70,10 +72,13 @@ export default function AddCenter() {
         // onEdit(index);   
     };
     const handleDelete = (index) => {
-        const rowData = data[index];
+        const dataCopy = [...data];
+        const rowData = dataCopy[index];
         // You can now use the rowData for further actions (e.g., confirm deletion)
         console.log("Hello",rowData.uid);
         deleteCenter(rowData.uid);
+        dataCopy.splice(index, 1);
+        setData(dataCopy)
         
         toast({
             title: "Center Deleted!",
@@ -208,7 +213,7 @@ export default function AddCenter() {
             </Modal>
 
             <Box mt={10} boxShadow={"lg"} rounded="md" borderWidth={2} borderColor="brand.light" bg={"gray.100"}>
-                <TableContainer mt={20}>
+                <TableContainer overflowX={"auto"}>
                     <Table variant='simple'>
                         <Thead >
                             <Tr>
@@ -228,7 +233,7 @@ export default function AddCenter() {
                                     <Td>{d.title}</Td>
                                     <Td>{d.city}</Td>
                                     <Td>{d.state}</Td>
-                                    <Td>{d.address}</Td>
+                                    <Td>{d.address.substr(0, 30)}<br/>{d.address.substr(30)}</Td>
                                     <Td><Link href={d.locationURL} isExternal>Get Directions</Link></Td>
                                     <Td>{d.phone}</Td>
                                     <Td>

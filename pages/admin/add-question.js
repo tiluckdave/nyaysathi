@@ -1,9 +1,9 @@
 import AdminDashboardWrapper from "@/components/AdminDashboardWrapper";
-import { Button, Flex, FormControl, FormLabel, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Table, Thead, Tbody, Tr, Th, Td, IconButton, Icon, TableContainer, Box, useToast, Text, Editable, } from "@chakra-ui/react";
+import { Button, Flex, FormControl, FormLabel, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Table, Thead, Wrap, WrapItem, Tbody, Tr, Th, Td, IconButton, Icon, TableContainer, Box, useToast, Text, Editable, Textarea } from "@chakra-ui/react";
 import { IoMdAddCircle } from "react-icons/io";
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useState, useEffect } from "react";
-import { createQuestion, getAllQuestions, deleteQuestion,updateQuestionDB } from "@/lib/db";
+import { createQuestion, getAllQuestions, deleteQuestion, updateQuestionDB } from "@/lib/db";
 
 
 
@@ -133,8 +133,9 @@ export default function AddQuestion() {
                     <ModalBody>
                         <FormControl mb={4}>
                             <FormLabel>Question</FormLabel>
-                            <Input
+                            <Textarea
                                 type="text"
+                                rows={3}
                                 placeholder="Enter your question"
                                 value={question}
                                 onChange={(e) => setQuestion(e.target.value)}
@@ -181,9 +182,9 @@ export default function AddQuestion() {
             </Modal>
 
             <Box mt={10} boxShadow={"lg"} rounded="md" borderWidth={2} borderColor="brand.light" bg={"gray.100"} overflowX="auto" overflowY="auto" maxWidth="100%">
-                <TableContainer mt={20}>    
+                <TableContainer>
                     <Table maxW={"100%"} variant='simple' >
-                        <Thead  position="sticky" top={0} >
+                        <Thead position="sticky" top={0} >
                             <Tr>
                                 <Th fontSize={"md"}>Question Text</Th>
                                 <Th fontSize={"md"}>Options</Th>
@@ -195,19 +196,19 @@ export default function AddQuestion() {
                             {data?.map((row, index) => (
                                 <Tr key={index}>
                                     {/* Question Text */}
-                                    <Td>
-                                       {row.question}
+                                    <Td maxWidth={"300px"} overflowX={"hidden"}>
+                                                {row.question}...
                                     </Td>
 
                                     {/* Options */}
                                     <Td>
-                                       
-                                            <ul>
-                                                {row.options.map((option, optionIndex) => (
-                                                    <li key={optionIndex}>{option}</li>
-                                                ))}
-                                            </ul>
-                                     
+
+                                        <ul>
+                                            {row.options.map((option, optionIndex) => (
+                                                <li key={optionIndex}>{option}</li>
+                                            ))}
+                                        </ul>
+
                                     </Td>
 
                                     {/* Correct Answer */}
@@ -254,7 +255,7 @@ export default function AddQuestion() {
                     <ModalBody>
                         <FormControl mb={4}>
                             <FormLabel>Question</FormLabel>
-                            <Input
+                            <Textarea
                                 type="text"
                                 value={editData.question}
                                 onChange={(e) => setQuestion(e.target.value)}
@@ -263,9 +264,9 @@ export default function AddQuestion() {
 
                         {/* <FormControl mb={4}>
                             <FormLabel>Options</FormLabel> */}
-                            {editData?.options?.map((option, optionIndex) => (
-                                 <FormControl key={optionIndex} mb={4}>
-                                 <FormLabel>{`Option ${optionIndex + 1}`}</FormLabel>
+                        {editData?.options?.map((option, optionIndex) => (
+                            <FormControl key={optionIndex} mb={4}>
+                                <FormLabel>{`Option ${optionIndex + 1}`}</FormLabel>
                                 <Input
                                     key={optionIndex}
                                     type="text"
@@ -277,8 +278,8 @@ export default function AddQuestion() {
                                     }}
                                     mb={2}
                                 />
-                                </FormControl>
-                            ))}
+                            </FormControl>
+                        ))}
                         {/* </FormControl> */}
 
                         {/* <FormControl mb={4}>
