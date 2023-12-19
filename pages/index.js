@@ -5,28 +5,27 @@ import Link from 'next/link';
 export default function Home() {
 
   return (
-
     <>
       <Flex direction={{ base: 'column', md: 'row' }} px={4} bg="white" color="black" align="center" justify="space-between" w="100%">
         {/* Left Section */}
         <Flex align="center">
-          <Image src="Emb.png" alt="Banner Image" boxSize="80px" borderRadius="10px" mr={2} bg={'white'} width={'100px'} mt={'15px'} />
+          <Image src="Emb.png" alt="Banner Image" boxSize="70px" borderRadius="10px" mr={2} bg={'white'} width={'90px'} mt={'38px'}height={'100px'} />
           <Stack>
-            <Heading fontSize={{ base: 'sm', md: 'md' }} mt={'10px'} mb={-3}>विधि और न्याय मंत्रालय</Heading>
-            <Text fontWeight="bold" textTransform={'uppercase'} fontSize={{ base: 'xl', md: '2xl' }}>Ministry of Law & <br style={{ margin: '-0.7em' }} />Justice</Text>
+            <Heading fontSize={{ base: 'sm', md: 'md' }} mt={'25px'} mb={-3} >विधि और न्याय मंत्रालय</Heading>
+            <Text fontWeight="bold" textTransform={'uppercase'} fontSize={{ base: 'xl', md: '2xl' }} >Ministry of Law & <br style={{ margin: '-0.7em' }} />Justice</Text>
           </Stack>
         </Flex>
 
         {/* Right Section */}
         <Flex align="center">
-          <Image src="g20.png" alt="Right Image" boxSize="80px" borderRadius="10px" ml={4} width={'150px'} />
+          <Image src="g20.png" alt="Right Image" boxSize="80px" borderRadius="10px" ml={4} mt={4} width={'150px'} />
         </Flex>
       </Flex>
 
-      <Stack direction={{ base: 'column-reverse', md: 'row' }}>
+      <Stack direction={{ base: 'column', md: 'row' }}>
         <Flex px={8} flex={1} align={'center'} justify={'center'}>
           <Stack spacing={6} w={'full'} maxW={'lg'}>
-            <Image src='/icon.svg' alt="Logo" width="75px"></Image>
+            <Image src='/icon.svg' alt="Logo" width="85px" mt={'30px'} mb={'-30px'}></Image>
             <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
               <Text
                 as={'span'}
@@ -71,12 +70,15 @@ export default function Home() {
           </Stack>
         </Flex>
         <Flex flex={1} p={8}>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'  }}>
             <Image
+            mt={'-10px'}
+            ml={{base: 0, lg: '185px'}}
               alt={'Login Image'}
               objectFit={'cover'}
               src='Modi.png'
               style={{
+                width:'450px',
                 borderRadius: '10px', // Add rounded corners
                 overflow: 'hidden', // Hide overflow content
 
