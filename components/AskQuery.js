@@ -14,6 +14,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { IoSend } from "react-icons/io5";
 import { IoMdThumbsUp, IoMdThumbsDown } from "react-icons/io";
+import { FaMicrophone, FaStop } from "react-icons/fa";
+import { useAudioRecorder } from 'react-audio-voice-recorder';
 import { UserAuth } from "@/lib/auth";
 import { getLawyer } from "@/lib/db";
 
@@ -26,6 +28,61 @@ export default function AskQuery() {
   const [ sourceDocs, setSourceDocs ] = useState([]);
   const [ lawyers, setLawyers ] = useState([]);
   const [ idk, setIdk ] = useState(false);
+  const [ recording, setRecording ] = useState(false);
+  // const [ blob, setBlob ] = useState(null);
+  const {
+    startRecording,
+    stopRecording,
+    recordingBlob,
+  } = useAudioRecorder({ audioBitsPerSecond: 128000, mimeType: 'audio/wav' });
+
+  const handleStartRecording = async () => {
+    startRecording()
+    setRecording(true);
+  }
+
+  function generateBengali(blob) {
+    console.log(blob)
+    const formData = new FormData();
+    formData.append("file", blob);
+    try {
+      const endpoint = 'http://localhost:5000/ask-voice';
+      const response = fetch(endpoint, {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      const responseData = response.json();
+      console.log(responseData);
+      
+      if (responseData.answer.includes("I am not sure about this")) {
+        setIdk(true);
+      }
+      
+      setApiOutput(responseData.answer);
+      setSpecs(responseData.specs);
+      console.log(responseData);
+      setSourceDocs(responseData.docs);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  }
+
+  const handleStopRecording = () => {
+    stopRecording()
+    setLoading(true)
+    if (recordingBlob) {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(recordingBlob);
+      reader.onloadend = function () {
+        const wavBlob = new Blob([ reader.result ], { type: 'audio/wav' });
+        generateBengali(wavBlob);
+      }
+    }
+  }
 
   const askSathi = async () => {
     try {
@@ -141,13 +198,40 @@ export default function AskQuery() {
           rounded="full"
           position={"absolute"}
           bottom={{ base: 2, lg: 3 }}
-          right={{ base: 2, lg: 3 }}
+          right={{ base: 12, lg: 16 }}
           isLoading={loading}
           zIndex={2}
           onClick={askSathi}
         >
           <Icon as={IoSend} color={"gray.50"} />
         </Button>
+        {!recording ? ( <Button
+          colorScheme="yellow"
+          size={{ base: "sm", lg: "md" }}
+          rounded="full"
+          position={"absolute"}
+          bottom={{ base: 2, lg: 3 }}
+          right={{ base: 2, lg: 3 }}
+          isLoading={loading}
+          zIndex={2}
+          onClick={handleStartRecording}
+        >
+          <Icon as={FaMicrophone} color={"gray.50"} />
+        </Button>) : (<Button
+          colorScheme="yellow"
+          size={{ base: "sm", lg: "md" }}
+          rounded="full"
+          position={"absolute"}
+          bottom={{ base: 2, lg: 3 }}
+          right={{ base: 2, lg: 3 }}
+          isLoading={loading}
+          zIndex={2}
+          onClick={handleStopRecording}
+        >
+          <Icon as={FaStop} color={"gray.50"} />
+        </Button>
+            
+          )}
       </Flex>
 
       <Flex
