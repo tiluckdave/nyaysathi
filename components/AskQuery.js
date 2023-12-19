@@ -68,11 +68,11 @@ export default function AskQuery() {
   useEffect(() => {
     console.log("Specs:", specs);
     console.log(user);
-    console.log("State:", user.state);
-    console.log("City:", user.city);
+    console.log("State:", user?.state);
+    console.log("City:", user?.city);
     const fetchData = async () => {
       try {
-        const resultLawyers = await getLawyer(specs, user.state, user.city);
+        const resultLawyers = await getLawyer(specs, user?.state, user?.city);
         setLawyers(resultLawyers);
         console.log("Lawyers:", resultLawyers);
       } catch (error) {
