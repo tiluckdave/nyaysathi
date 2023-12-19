@@ -56,11 +56,11 @@ export default function AskQuery() {
       }
       const responseData = response.json();
       console.log(responseData);
-      
+
       if (responseData.answer.includes("I am not sure about this")) {
         setIdk(true);
       }
-      
+
       setApiOutput(responseData.answer);
       setSpecs(responseData.specs);
       console.log(responseData);
@@ -81,7 +81,7 @@ export default function AskQuery() {
       setIdk(false);
       setLoading(true);
       // const endpoint = 'https://nyaysathi.replit.app/ask';
-        const endpoint = "http://localhost:5000/ask";
+      const endpoint = "http://localhost:5000/ask";
       const requestData = {
         question: userInput,
       };
@@ -181,7 +181,7 @@ export default function AskQuery() {
     }
     generateBengali();
 
-  }, [ recordingBlob ])
+  }, [ generateBengali, recordingBlob ])
 
   return (
     <Flex flexDirection={"column"} gap={6}>
@@ -210,7 +210,7 @@ export default function AskQuery() {
         >
           <Icon as={IoSend} color={"gray.50"} />
         </Button>
-        {!recording ? ( <Button
+        {!recording ? (<Button
           colorScheme="yellow"
           size={{ base: "sm", lg: "md" }}
           rounded="full"
@@ -235,8 +235,8 @@ export default function AskQuery() {
         >
           <Icon as={FaStop} color={"gray.50"} />
         </Button>
-            
-          )}
+
+        )}
       </Flex>
 
       <Flex
