@@ -29,7 +29,7 @@ export default function AskQuery() {
   const [ lawyers, setLawyers ] = useState([]);
   const [ idk, setIdk ] = useState(false);
   const [ recording, setRecording ] = useState(false);
-  // const [ blob, setBlob ] = useState(null);
+  const [ blob, setBlob ] = useState(null);
   const {
     startRecording,
     stopRecording,
@@ -41,7 +41,7 @@ export default function AskQuery() {
     setRecording(true);
   }
 
-  function generateBengali(blob) {
+  function generateBengali() {
     console.log(blob)
     const formData = new FormData();
     formData.append("file", blob);
@@ -74,14 +74,6 @@ export default function AskQuery() {
   const handleStopRecording = () => {
     stopRecording()
     setLoading(true)
-    if (recordingBlob) {
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(recordingBlob);
-      reader.onloadend = function () {
-        const wavBlob = new Blob([ reader.result ], { type: 'audio/wav' });
-        generateBengali(wavBlob);
-      }
-    }
   }
 
   const askSathi = async () => {
@@ -177,6 +169,19 @@ export default function AskQuery() {
 
     fetchData();
   }, [ specs, user ]);
+
+  useEffect(() => {
+    if (!recordingBlob) return;
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(recordingBlob);
+    reader.onloadend = function () {
+      const wavBlob = new Blob([ reader.result ], { type: 'audio/wav' });
+      console.log(wavBlob)
+      setBlob(wavBlob);
+    }
+    generateBengali();
+
+  }, [ recordingBlob ])
 
   return (
     <Flex flexDirection={"column"} gap={6}>
