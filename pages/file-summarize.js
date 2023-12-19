@@ -35,7 +35,7 @@ export default function FileSummarize() {
         formData.append("file", file);
         formData.append("lang", selectedLanguage);
 
-        fetch("http://localhost:5000/summarize", {
+        fetch("https://nyaysathi.replit.app/summarize", {
             method: "POST",
             body: formData,
         })
