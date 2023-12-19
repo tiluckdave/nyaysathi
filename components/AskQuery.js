@@ -31,8 +31,8 @@ export default function AskQuery() {
     try {
       setIdk(false);
       setLoading(true);
-      const endpoint = 'https://nyaysathi.replit.app/ask';
-      //   const endpoint = "http://localhost:5000/ask";
+      // const endpoint = 'https://nyaysathi.replit.app/ask';
+        const endpoint = "http://localhost:5000/ask";
       const requestData = {
         question: userInput,
       };

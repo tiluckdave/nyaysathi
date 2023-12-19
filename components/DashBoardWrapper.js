@@ -60,12 +60,12 @@ export default function DashBoardWrapper({ children, page }) {
                             <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Case Summarize</Text>
                         </Button>
                     </Link>
-                    <Link href="/storage" width="100%">
+                    {/* <Link href="/storage" width="100%">
                         <Button colorScheme='gray' bg={storage && "gray.200"} padding={2} rounded={{ base: "full", lg: 4 }} alignItems={"center"} justifyContent="flex-start" width="100%">
                             <Icon boxSize={{ base: 7, lg: 5 }} as={TbCloudUpload} />
                             <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Secure Storage</Text>
                         </Button>
-                    </Link>
+                    </Link> */}
                     <Link href="/aid-directory" width="100%">
                         <Button colorScheme='gray' bg={aid && "gray.200"} padding={2} rounded={{ base: "full", lg: 4 }} alignItems={"center"} justifyContent="flex-start" width="100%">
                             <Icon boxSize={{ base: 7, lg: 5 }} as={RiContactsBookLine} />
@@ -88,14 +88,14 @@ export default function DashBoardWrapper({ children, page }) {
                             </Button>
                         </Link>
                     </Box>
-                    <Box display={{ base: "none", lg: "block" }}>
+                    {/* <Box display={{ base: "none", lg: "block" }}>
                         <Link href="/chat-with-lawyer" width="100%">
                             <Button colorScheme='gray' bg={faqs && "gray.200"} padding={2} rounded={{ base: "full", lg: 4 }} alignItems={"center"} justifyContent="flex-start" width="100%">
                                 <Icon boxSize={{ base: 7, lg: 5 }} as={GrChat} />
                                 <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Chat with Lawyers</Text>
                             </Button>
                         </Link>
-                    </Box>
+                    </Box> */}
                 </Flex>
 
                 <Flex flexDirection={{ base: "row", lg: "row" }} justifyContent={"space-between"} gap={4} width={{ base: "20%", lg: "100%" }}>
