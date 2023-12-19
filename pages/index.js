@@ -9,7 +9,7 @@ export default function Home() {
       <Flex direction={{ base: 'column', md: 'row' }} px={4} bg="white" color="black" align="center" justify="space-between" w="100%">
         {/* Left Section */}
         <Flex align="center">
-          <Image src="Emb.png" alt="Banner Image" boxSize="70px" borderRadius="10px" mr={2} bg={'white'} width={'90px'} mt={'38px'}height={'100px'} />
+          <Image src="E.jpg" alt="Banner Image" boxSize="70px" borderRadius="10px" mr={2} bg={'white'} width={'65px'} mt={'38px'}height={'100px'} />
           <Stack>
             <Heading fontSize={{ base: 'sm', md: 'md' }} mt={'25px'} mb={-3} >विधि और न्याय मंत्रालय</Heading>
             <Text fontWeight="bold" textTransform={'uppercase'} fontSize={{ base: 'xl', md: '2xl' }} >Ministry of Law & <br style={{ margin: '-0.7em' }} />Justice</Text>
