@@ -39,9 +39,7 @@ export default function Login() {
         signInWithEmail("lawyer");
     }, [ signInWithEmail ]);
 
-    if (user) {
-        router.push("/dashboard");
-    }
+  
 
     return (
         <Flex bg={"gray.100"} height={"100vh"} >
