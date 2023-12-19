@@ -102,7 +102,7 @@ export default function AidDirectory() {
 
             </Flex>
             <Flex gap={4} mt={10} flexDirection={{ base: "column", lg: "row" }} >
-                <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(200px, 1fr))'>
+                <SimpleGrid spacing={4} columns={{base: 1, lg: 4}}>
                     {centers?.map((center) => (
                         <Card key={center.uid} maxW='m'>
                             <CardBody backgroundColor={"gray.100"} rounded={10} dropShadow={"lg"}>
