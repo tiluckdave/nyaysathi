@@ -1,70 +1,26 @@
 import { Box, Button, Flex, Icon, Input, Text } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
 import { IoSend } from "react-icons/io5";
+import { findChatByUserId, createChat, addMessage } from "@/lib/db";
+import { UserAuth } from "@/lib/auth";
 
 export default function ChatLawyer() {
+    const { user } = UserAuth();
     const messagesEndRef = useRef(null)
     const [ loading, setLoading ] = useState(false)
     const [ userInput, setUserInput ] = useState(null)
-    const [ act, setAct ] = useState(null)
+    const [ chatId, setChatId ] = useState(null)
     const [ messages, setMessages ] = useState([ "Ask your query, this will be shown to lawyers and anyone can answer your question." ])
 
-    const addMessage = () => {
-        setMessages([ ...messages, userInput, "NyaySathi is Thinking..." ])
+    const addStateMessage = async () => {
+        setMessages([ ...messages, userInput, "Active lawyers will get back to you as soon as possible." ])
         setUserInput("")
         setLoading(true)
-        const base = 'https://nyaysathi.replit.app/';
-        if (messages.length === 1) {
-            const endpoint = base + 'ask';
-            const requestData = {
-                question: userInput
-            };
-            fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData),
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
-                }
-                return response.json();
-            }).then(responseData => {
-                console.log(responseData);
-                setAct(responseData.act)
-                setMessages([ ...messages, userInput, responseData.answer ])
-                setLoading(false)
-            }).catch(error => {
-                console.error('Error:', error.message);
-            });
-        }
-        else {
-            const endpoint = base + 'chat';
-            const requestData = {
-                act: act,
-                question: userInput,
-                context: messages[ messages.length - 2 ]
-            };
-            fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData),
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
-                }
-                return response.json();
-            }).then(responseData => {
-                console.log(responseData);
-                setMessages([ ...messages, userInput, responseData.answer ])
-                setLoading(false)
-            }).catch(error => {
-                console.error('Error:', error.message);
-            });
-        }
+        console.log(chatId)
+        // if (chatId) {
+        //     await addMessage(chatId, userInput)
+        // }
+        addMessage(chatId, userInput)
     }
 
     const scrollToBottom = () => {
@@ -74,6 +30,28 @@ export default function ChatLawyer() {
     useEffect(() => {
         scrollToBottom()
     }, [ messages ]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (user?.uid) {
+                const chat = await findChatByUserId(user?.uid)
+                if (chat) {
+                    // console.log(chat)
+                    setChatId(chat.id)
+                    setMessages(chat.messages)
+                    if (chat.messages.length % 2 === 1) {
+                        setLoading(false)
+                    } else {
+                        setLoading(true)
+                    }
+                } else {
+                    const newChat = await createChat(user.uid, messages)
+                    setChatId(newChat)
+                }
+            }
+        }
+        fetchData()
+    }, [ messages, user ])
 
     return (
         <Flex flexDirection={"column"} gap={3} paddingBottom={"65px"}>
@@ -99,7 +77,7 @@ export default function ChatLawyer() {
                 <Flex gap={2} flexDirection={"column"} position={"relative"} paddingBottom={{ base: 1, lg: 2 }}>
                     <Input placeholder="Type your query here" bg={"gray.50"} focusBorderColor='yellow.400' disabled={loading} paddingRight={12} value={userInput} rounded={"full"}
                         onChange={(e) => setUserInput(e.target.value)} />
-                    <Button colorScheme='yellow' size={"sm"} rounded="full" position={"absolute"} bottom={{base: 2, lg: 3}} right={1} isLoading={loading} zIndex={2} ><Icon as={IoSend} color={"gray.50"} onClick={addMessage} /></Button>
+                    <Button colorScheme='yellow' size={"sm"} rounded="full" position={"absolute"} bottom={{ base: 2, lg: 3 }} right={1} isLoading={loading} zIndex={2} ><Icon as={IoSend} color={"gray.50"} onClick={addStateMessage} /></Button>
                 </Flex>
             </Flex>
         </Flex>
