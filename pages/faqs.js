@@ -1,5 +1,5 @@
 import DashBoardWrapper from "@/components/DashBoardWrapper";
-import { ChakraProvider, CSSReset, Box, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from "@chakra-ui/react";
+import { Heading,ChakraProvider, CSSReset, Box, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from "@chakra-ui/react";
 import React from "react";
 
 
@@ -68,7 +68,7 @@ export default function Faqs() {
 
     return (
         <DashBoardWrapper page="faqs">
-            FAQ'S
+           <Heading fontSize="3xl">FAQ'S</Heading>
             <FAQPage/>
     
         </DashBoardWrapper>

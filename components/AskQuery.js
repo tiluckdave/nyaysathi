@@ -1,45 +1,74 @@
 import { Button, Flex, Icon, Text, Textarea } from '@chakra-ui/react'
 import Link from 'next/link';
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { IoSend } from "react-icons/io5";
+import { UserAuth } from '@/lib/auth';
+import { getLawyer } from '@/lib/db';
 
 export default function AskQuery() {
+    const { user } = UserAuth();
     const [ loading, setLoading ] = useState(false)
     const [ userInput, setUserInput ] = useState(null)
     const [ apiOutput, setApiOutput ] = useState(null)
+    const [specs, setSpecs] = useState([]);
+    const [lawyers, setLawyers] = useState([]);
     const [ idk, setIdk ] = useState(false)
 
-    const askSathi = () => {
-        setIdk(false)
-        setLoading(true)
-        const endpoint = 'https://nyaysathi.replit.app/ask';
-        const requestData = {
-            question: userInput
-        };
-
-        fetch(endpoint, {
+    const askSathi = async () => {
+        try {
+          setIdk(false);
+          setLoading(true);
+          const endpoint = 'https://nyaysathi.replit.app/ask';
+          const requestData = {
+            question: userInput,
+          };
+      
+          const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestData),
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
-            }
-            return response.json();
-        }).then(responseData => {
-            console.log(responseData);
-            // responseData.answer find string "I am not sure about this"
-            if (responseData.answer.includes("I am not sure about this")) {
-                setIdk(true)
-            }
-            setApiOutput(responseData.answer)
-            setLoading(false)
-        }).catch(error => {
-            console.error('Error:', error.message);
-        });
-    }
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+      
+          const responseData = await response.json();
+          console.log(responseData);
+      
+          if (responseData.answer.includes("I am not sure about this")) {
+            setIdk(true);
+          }
+      
+          setApiOutput(responseData.answer);
+          setSpecs(responseData.specs);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error:', error.message);
+        }
+      };
+      
+      useEffect(() => {
+        console.log("Specs:", specs);
+        console.log(user);
+        console.log("State:", user.state);
+        console.log("City:", user.city);
+        const fetchData = async () => {
+          try {
+            const resultLawyers = await getLawyer(specs, user.state, user.city);
+            setLawyers(resultLawyers);
+            console.log("Lawyers:", resultLawyers);
+          } catch (error) {
+            console.error("Error fetching lawyers:", error.message);
+          }
+        };
+    
+        fetchData();
+      }, [specs]);
+      
+      
 
 
     return (
@@ -56,6 +85,12 @@ export default function AskQuery() {
                 {!loading && apiOutput && <Flex flexDirection={"column"}>
                     <Text fontWeight={"bold"}>NyaySathi</Text>
                     {!idk && <Text>{apiOutput}</Text>}
+                    <Text mt={10} fontWeight={"bold"}>In case you need lawyers here are some we recommed based on your case:</Text>
+                    {!idk && lawyers.map((lawyer, index) => (
+                        <Text key={index}>
+                            Name: {lawyer.name}, Email: {lawyer.email}.
+                        </Text>
+                    ))}
                     {idk && <Flex flexDir={"column"} gap="4">
                         <Text>I am still learning and very sorry to say but I do not have proper knowledge to answer your question. Just to be extra sure can you recheck your question.</Text>
                         <Text>I have a link to the source where you might find information relevant with your query.</Text>

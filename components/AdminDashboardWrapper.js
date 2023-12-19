@@ -43,7 +43,7 @@ export default function AdminDashboardWrapper({ children, page }) {
                             <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Legal Aid Centers</Text>
                         </Button>
                     </Link>
-                    <Link href="/admin/verify-lawyer" width="100%">
+                    <Link href="/admin/verify-lawyers" width="100%">
                         <Button colorScheme='gray' bg={verifyLawyer && "gray.200"} padding={2} rounded={{ base: "full", lg: 4 }} alignItems={"center"} justifyContent="flex-start" width="100%">
                             <Icon boxSize={{ base: 7, lg: 5 }} as={FaUserCheck} />
                             <Text display={{ base: "none", lg: "block" }} marginLeft={{ base: 0, lg: 3 }}>Verify Lawyer</Text>
