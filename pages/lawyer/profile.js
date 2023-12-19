@@ -28,10 +28,11 @@ import {
 import Select from 'react-select';
 import axios from "axios";
 import { FaUserEdit } from "react-icons/fa";
-import { updateLawyerDetailsDB } from "@/lib/db";
+import { updateLawyerDetailsDB,getLawyerProfile } from "@/lib/db";
 
 export default function Profile({ challenge }) {
 const { user } = UserAuth();
+const [lawyer ,setLawyer] = useState();
 const [ fname, setFname ] = useState("");
 const [ lname, setLname ] = useState("");
 const [lawyerNo ,setLawyerNo] = useState("");
@@ -89,31 +90,37 @@ const updateProfile = () => {
     })
 }
 
-
+const name = async() =>{
+    const lawyer1 = await getLawyerProfile(user?.uid , user?.email)
+    setLawyer(lawyer1)
+    console.log(lawyer1)
+}
 
 useEffect(() => {
     if (user) {
-        console.log('user.uid : ',user.uid)
+        name()
         setFname((user?.name)?.split(" ")[ 0 ])
         setLname((user?.name)?.split(" ")[ 1 ])
     }
 }, [ setFname, setLname, user ]);
 
 useEffect(() => {
-    setAge(user?.age)
-    setState(user?.state)
-    setCity(user?.city)
-    setPhone(user?.phone)
-    setGender(user?.gender)
-    setLawyerNo(user?.lawyerNumber)
-    setDegree(user?.degree)
-    setDescription(user?.description);
-    setSpecialization(user?.specialization);
-    setExperience(user?.experience);
-    setFees(user?.fees);
-    setFname((user?.name)?.split(" ")[ 0 ])
-    setLname((user?.name)?.split(" ")[ 1 ])
-}, [ setFname, setLname, user ]);
+    console.log(lawyer?.age)
+    setAge(lawyer?.age)
+    setState(lawyer?.state)
+    setCity(lawyer?.city)
+    setPhone(lawyer?.phone)
+    setGender(lawyer?.gender)
+    setLawyerNo(lawyer?.lawyerNumber)
+    setDegree(lawyer?.degree)
+    setDescription(lawyer?.description);
+    setSpecialization(lawyer?.specialization);
+    setExperience(lawyer?.experience);
+    setFees(lawyer?.fees);
+    setFname((lawyer?.name)?.split(" ")[ 0 ])
+    setLname((lawyer?.name)?.split(" ")[ 1 ])
+    
+}, [ lawyer ]);
 
 useEffect(() => {
     const fetchData = async () => {

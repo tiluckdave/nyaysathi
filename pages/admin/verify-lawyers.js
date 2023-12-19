@@ -79,15 +79,15 @@ export default function VerifyLawyers() {
             </Heading>
            
             <Box mt={10} boxShadow={"lg"} rounded="md" borderWidth={2} borderColor="brand.light" bg={"gray.100"} overflowX="auto" overflowY="auto" maxWidth="100%">
-                <TableContainer  mt={20}>
+                <TableContainer>
                     <Table  maxW={"100%"} variant='simple' >
                         <Thead  position="sticky" top={0} >
                             <Tr paddingTop={0}>
-                                <Th paddingTop={0} fontSize={"md"}>Lawyer Number</Th>
-                                <Th paddingTop={0} fontSize={"md"}>Lawyer Name</Th>
-                                <Th paddingTop={0} fontSize={"md"}>Lawyer Degree</Th>
-                                <Th paddingTop={0} fontSize={"md"}>Lawyer Experience</Th>
-                                <Th paddingTop={0} fontSize={"md"}>Actions</Th>
+                                <Th fontSize={"md"}>Lawyer Number</Th>
+                                <Th fontSize={"md"}>Lawyer Name</Th>
+                                <Th fontSize={"md"}>Lawyer Degree</Th>
+                                <Th fontSize={"md"}>Lawyer Experience</Th>
+                                <Th fontSize={"md"}>Actions</Th>
                             </Tr>
                         </Thead>
                         {lawyers && lawyers.map((lawyer, index) => (
