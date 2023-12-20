@@ -51,7 +51,7 @@ export default function AskQuery() {
     const formData = new FormData();
     formData.append("file", blob);
     try {
-      const endpoint = 'http://localhost:3000//ask-voice';
+      const endpoint = 'https://nyaysathi.replit.app/ask-voice';
       const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
@@ -89,7 +89,7 @@ export default function AskQuery() {
     try {
       setIdk(false);
       setLoading(true);
-      const endpoint = 'http://localhost:3000//ask';
+      const endpoint = 'https://nyaysathi.replit.app/ask';
       // const endpoint = "http://localhost:5000/ask";
       const requestData = {
         question: userInput,
@@ -129,7 +129,7 @@ export default function AskQuery() {
     try {
       setIdk(false);
       setLoading(true);
-      const endpoint = 'http://localhost:3000//reask';
+      const endpoint = 'https://nyaysathi.vercel.app/reask';
       const requestData = {
         question: userInput,
         response: apiOutput,
