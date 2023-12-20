@@ -11,7 +11,7 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoSend } from "react-icons/io5";
 import { IoMdThumbsUp, IoMdThumbsDown } from "react-icons/io";
 import { FaMicrophone, FaStop } from "react-icons/fa";
@@ -20,6 +20,7 @@ import { UserAuth } from "@/lib/auth";
 import { getLawyer } from "@/lib/db";
 
 export default function AskQuery() {
+  const audioRef = useRef(null);
   const { user } = UserAuth();
   const [ loading, setLoading ] = useState(false);
   const [ userInput, setUserInput ] = useState(null);
@@ -32,7 +33,7 @@ export default function AskQuery() {
   const [ recorded, setRecorded ] = useState(false);
   const [ audio, setAudio ] = useState(null);
   const [ blob, setBlob ] = useState(null);
-  const [ base64, setBase64 ] = useState(null)
+  const [ isAudioLoaded, setIsAudioLoaded ] = useState(false);
   const {
     startRecording,
     stopRecording,
@@ -68,7 +69,7 @@ export default function AskQuery() {
       setApiOutput(responseData.answer);
       setUserInput(responseData.question);
       setSpecs(responseData.specs);
-      setAudio(responseData.voice)
+      setAudio(responseData.voice);
       console.log(responseData);
       setSourceDocs(responseData.docs);
       setRecorded(false);
@@ -191,6 +192,25 @@ export default function AskQuery() {
 
   }, [ setRecorded, recordingBlob ])
 
+  useEffect(() => {
+    const audioElement = audioRef.current;
+
+    const handleCanPlay = () => {
+      // Audio is ready to play
+      setIsAudioLoaded(true);
+      audioElement.play();
+    };
+
+    if (audioElement) {
+      audioElement.addEventListener('canplay', handleCanPlay);
+
+      // Cleanup event listener on component unmount
+      return () => {
+        audioElement.removeEventListener('canplay', handleCanPlay);
+      };
+    }
+  }, []);
+
   return (
     <Flex flexDirection={"column"} gap={6}>
       <Flex gap={2} position={"relative"}>
@@ -283,12 +303,12 @@ export default function AskQuery() {
         )}
         {!loading && apiOutput && (
           <Flex flexDirection={"column"}>
-            <Text fontWeight={"bold"}>NyaySathi</Text>
-            {!idk && <Text>{apiOutput}</Text>}
-            <audio controls>
-              <source src={audio} type="audio/m4a" />
+            <audio ref={audioRef} controls >
+              <source src={audio} />
               Your browser does not support the audio element.
             </audio>
+            <Text fontWeight={"bold"}>NyaySathi</Text>
+            {!idk && <Text>{apiOutput}</Text>}
             {idk && (
               <Flex flexDir={"column"} gap="4">
                 <Text>
