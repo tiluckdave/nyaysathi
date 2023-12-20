@@ -52,7 +52,7 @@ export default function Storage() {
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch("http://localhost:5000/upload", {
+        fetch("https://nyaysathi.replit.app/upload", {
             method: "POST",
             body: formData,
         })

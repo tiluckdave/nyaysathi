@@ -51,7 +51,7 @@ export default function AskQuery() {
     const formData = new FormData();
     formData.append("file", blob);
     try {
-      const endpoint = 'http://localhost:5000/ask-voice';
+      const endpoint = 'https://nyaysathi.replit.app/ask-voice';
       const response = await fetch(endpoint, {
         method: "POST",
         body: formData,

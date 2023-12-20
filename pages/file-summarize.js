@@ -35,7 +35,8 @@ export default function FileSummarize() {
         formData.append("file", file);
         formData.append("lang", selectedLanguage);
 
-        fetch("https://nyaysathi.replit.app/summarize", {
+        // fetch("https://nyaysathi.replit.app/summarize", {
+        fetch("http://localhost:5000/summarize", {
             method: "POST",
             body: formData,
         })
@@ -78,6 +79,8 @@ export default function FileSummarize() {
                                 <Select value={selectedLanguage} onChange={(e) => setSelectedLanguage(e.target.value)} mb={4}>
                                     <option value="english">English</option>
                                     <option value="hindi">Hindi</option>
+                                    <option value="bengali">Bengali</option>
+                                    <option value="marathi">Marathi</option>
                                 </Select>
                                 {loading ? (
                                     <Spinner />
