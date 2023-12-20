@@ -3251,6 +3251,11 @@ inherits@2:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
+inline-worker@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/inline-worker/-/inline-worker-1.1.0.tgz#55e96f54915a642b00872a2daa6fe832b424c98d"
+  integrity sha512-2nlxBGg5Uoop6IRco9wMzlAz62690ylokrUDg3IaCi9bJaq0HykbWlRtRXgvSKiBNmCBGXnOCFBkIFjaSGJocA==
+
 internal-slot@^1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/internal-slot/-/internal-slot-1.0.6.tgz#37e756098c4911c5e912b8edbf71ed3aa116f930"
@@ -4054,6 +4059,13 @@ react@18.2.0:
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
   dependencies:
     loose-envify "^1.1.0"
+
+recorder-js@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/recorder-js/-/recorder-js-1.0.7.tgz#5416f05c863d95c4b6eb4b2658ad6c1baf9f5677"
+  integrity sha512-jSG4GP1FUV9vGxY9lrvaI2yGq1OwfIvK8MF8qPndODhkwGx+iPBTG7ZhWK8YHt/zT/c88MmFZCntv9G7x1Exxg==
+  dependencies:
+    inline-worker "^1.1.0"
 
 reflect.getprototypeof@^1.0.4:
   version "1.0.4"

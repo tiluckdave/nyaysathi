@@ -23,7 +23,7 @@ export default function AskQuery() {
   const { user } = UserAuth();
   const [ loading, setLoading ] = useState(false);
   const [ userInput, setUserInput ] = useState(null);
-  const [ apiOutput, setApiOutput ] = useState(null);
+  const [ apiOutput, setApiOutput ] = useState("আপনি আপনার সংশোধিত গড়ি বালি এর এছে ব্যবস্থা করতে পারেন যদি আপনি তার জন্য অনুমোদন পেতে প্রচুর সময় পান। আপনার বিষয়বস্তুর কোনও অংশ যদি প্রমাণিত হয়, তবে অভিযোগী দ্বারা প্রতিক্রিয়া প্রদান করতে পারেন। আপনার বিষয়বস্তুর কোনও অংশ যদি প্রমাণিত হয়, তবে অভিযোগী দ্বারা প্রতিক্রিয়া প্রদান করতে পারেন। এছাড়াও, আপনার সংশোধিত গড়ি বালি এর এছে ব্যবস্থা করতে পারেন যদি আপনি তার জন্য অনুমোদন পেতে প্রচুর সময় পান। আপনার বিষয়বস্তুর কোনও অংশ যদি প্রমাণিত হয়, তবে অভিযোগী দ্বারা প্রতিক্রিয");
   const [ specs, setSpecs ] = useState([]);
   const [ sourceDocs, setSourceDocs ] = useState([]);
   const [ lawyers, setLawyers ] = useState([]);
@@ -31,6 +31,7 @@ export default function AskQuery() {
   const [ recording, setRecording ] = useState(false);
   const [recorded, setRecorded] = useState(false);
   const [ blob, setBlob ] = useState(null);
+  const [base64, setBase64] = useState(null)
   const {
     startRecording,
     stopRecording,
@@ -40,6 +41,23 @@ export default function AskQuery() {
   const handleStartRecording = async () => {
     startRecording()
     setRecording(true);
+  }
+
+  const getAudio = async () => {
+    const response = await fetch('https://api.narakeet.com/text-to-speech/mp3?voice=salman', {
+      method: "POST",
+      headers: {
+        'x-api-key': process.env.NEXT_PUBLIC_NARAKEET,
+        'accept': 'application/octet-stream',
+        'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        data: apiOutput,
+      }),
+    })
+    
+    console.log(response)
+
   }
 
   const generateBengali = async () => {
@@ -281,6 +299,11 @@ export default function AskQuery() {
           <Flex flexDirection={"column"}>
             <Text fontWeight={"bold"}>NyaySathi</Text>
             {!idk && <Text>{apiOutput}</Text>}
+            <Button onClick={getAudio}>Play</Button>
+            <audio controls>
+            <source src={`data:audio/mp3;base64,${base64}`} type="audio/mp3" />
+            Your browser does not support the audio element.
+          </audio>
             {idk && (
               <Flex flexDir={"column"} gap="4">
                 <Text>
