@@ -335,10 +335,10 @@ export default function AskQuery() {
             {lawyers && (
               <Text mt={10} fontWeight={"bold"}>
                 These are some source files where we found data from, feel free
-                to read them for extra knowledge! case:
+                to read them for extra knowledge! case
               </Text>
             )}
-            <Stack direction="row">
+            <Stack direction={{base: "column", lg: "row"}}>
               {!idk && sourceDocs.length > 0 && sourceDocs.map((doc) => (
                 <Link key={doc}
                   href={`https://storage.googleapis.com/nyaysathi.appspot.com/${doc}.txt`}
