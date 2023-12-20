@@ -29,6 +29,7 @@ export default function AskQuery() {
   const [ lawyers, setLawyers ] = useState([]);
   const [ idk, setIdk ] = useState(false);
   const [ recording, setRecording ] = useState(false);
+  const [recorded, setRecorded] = useState(false);
   const [ blob, setBlob ] = useState(null);
   const {
     startRecording,
@@ -41,20 +42,20 @@ export default function AskQuery() {
     setRecording(true);
   }
 
-  function generateBengali() {
+  const generateBengali = async () => {
     console.log(blob)
     const formData = new FormData();
     formData.append("file", blob);
     try {
       const endpoint = 'http://localhost:5000/ask-voice';
-      const response = fetch(endpoint, {
+      const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });
       if (!response.ok) {
         throw new Error(`Error: ${response.status} - ${response.statusText}`);
       }
-      const responseData = response.json();
+      const responseData = await response.json();
       console.log(responseData);
 
       if (responseData.answer.includes("I am not sure about this")) {
@@ -62,9 +63,12 @@ export default function AskQuery() {
       }
 
       setApiOutput(responseData.answer);
+      setUserInput(responseData.question);
       setSpecs(responseData.specs);
       console.log(responseData);
       setSourceDocs(responseData.docs);
+      setRecorded(false);
+      setRecording(false);
       setLoading(false);
     } catch (error) {
       console.error("Error:", error.message);
@@ -179,9 +183,9 @@ export default function AskQuery() {
       console.log(wavBlob)
       setBlob(wavBlob);
     }
-    generateBengali();
+    setRecorded(true)
 
-  }, [ generateBengali, recordingBlob ])
+  }, [ setRecorded, recordingBlob ])
 
   return (
     <Flex flexDirection={"column"} gap={6}>
@@ -222,7 +226,7 @@ export default function AskQuery() {
           onClick={handleStartRecording}
         >
           <Icon as={FaMicrophone} color={"gray.50"} />
-        </Button>) : (<Button
+        </Button>) : (!recorded ? (<Button
           colorScheme="yellow"
           size={{ base: "sm", lg: "md" }}
           rounded="full"
@@ -236,7 +240,20 @@ export default function AskQuery() {
           <Icon as={FaStop} color={"gray.50"} />
         </Button>
 
-        )}
+        ):(
+          <Button
+          colorScheme="yellow"
+          size={{ base: "sm", lg: "md" }}
+          rounded="full"
+          position={"absolute"}
+          bottom={{ base: 2, lg: 3 }}
+          right={{ base: 2, lg: 3 }}
+          zIndex={2}
+          onClick={generateBengali}
+        >
+          <Icon as={IoSend} color={"gray.50"} />
+        </Button>
+        ))}
       </Flex>
 
       <Flex
