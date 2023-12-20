@@ -70,8 +70,8 @@ export default function AskQuery() {
       setUserInput(responseData.question);
       setSpecs(responseData.specs);
       setAudio(responseData.voice);
-      console.log(responseData);
       setSourceDocs(responseData.docs);
+      console.log(responseData);
       setRecorded(false);
       setRecording(false);
       setLoading(false);

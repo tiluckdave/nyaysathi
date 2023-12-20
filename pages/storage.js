@@ -210,7 +210,7 @@ export default function Storage() {
                             className='files-dropzone'
                             onChange={handleChange}
                             onError={handleError}
-                            accepts={[ 'image/png', 'image/jpg', '.pdf', '.wav' ]}
+                            accepts={[ 'image/png', 'image/jpg', '.pdf']}
                             maxFileSize={100000000}
                             minFileSize={0}
                             clickable>
