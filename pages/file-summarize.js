@@ -5,10 +5,13 @@ import Files from 'react-files';
 import { RxCross2 } from "react-icons/rx";
 
 export default function FileSummarize() {
+    const audioRef = useRef(null);
     const [file, setFile] = useState(null);
     const [summary, setSummary] = useState();
     const [selectedLanguage, setSelectedLanguage] = useState("english");
     const [loading, setLoading] = useState(false);
+    const [audio, setAudio] = useState(null)
+    const [ isAudioLoaded, setIsAudioLoaded ] = useState(false);
 
     function RemoveFile() {
         setFile(null);
@@ -43,6 +46,7 @@ export default function FileSummarize() {
             .then((response) => response.json())
             .then((result) => {
                 setSummary(result.summary);
+                setAudio(result.voice)
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -51,6 +55,25 @@ export default function FileSummarize() {
                 setLoading(false);
             });
     };
+
+    useEffect(() => {
+        const audioElement = audioRef.current;
+    
+        const handleCanPlay = () => {
+          // Audio is ready to play
+          setIsAudioLoaded(true);
+          audioElement.play();
+        };
+    
+        if (audioElement) {
+          audioElement.addEventListener('canplay', handleCanPlay);
+    
+          // Cleanup event listener on component unmount
+          return () => {
+            audioElement.removeEventListener('canplay', handleCanPlay);
+          };
+        }
+      }, []);
 
     return (
         <DashBoardWrapper page="file">
@@ -72,6 +95,10 @@ export default function FileSummarize() {
                             <Flex flexDirection="column" gap={2} padding={6} border={"2px"} borderColor={"gray.200"} rounded={10}>
                                 <Heading size="md" fontWeight="bold" textAlign={{ base: "center", lg: "left" }}>{file.name.split('.')[0]}</Heading>
                                 <Text fontSize={{ base: "sm", lg: "md" }} textAlign={"justify"} mt={2}>{summary}</Text>
+                                <audio ref={audioRef} controls >
+                                    <source src={audio} />
+                                    Your browser does not support the audio element.
+                                </audio>
                             </Flex>
                         ) : (
                             <Flex flexDirection="column" gap={2} padding={6} border={"2px"} borderColor={"gray.200"} rounded={10}>

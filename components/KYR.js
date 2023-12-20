@@ -16,7 +16,7 @@ export default function KYR() {
 
     function handleKYR() {
         setLoading(true)
-        const endpoint = 'https://nyaysathi.replit.app/kyr';
+        const endpoint = 'http://localhost:3000//kyr';
 
         const requestData = {
             age: age,

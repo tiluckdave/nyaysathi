@@ -15,7 +15,7 @@ export default function Audiotransfer() {
     const formData = new FormData();
     formData.append("file", blob);
     try {
-      const endpoint = 'https://nyaysathi.replit.app/ask-voice';
+      const endpoint = 'http://localhost:3000//ask-voice';
       const response = fetch(endpoint, {
         method: "POST",
         body: formData,
