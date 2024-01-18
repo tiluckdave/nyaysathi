@@ -13,8 +13,8 @@ export default function ChatLegal() {
         setMessages([ ...messages, userInput, "NyaySathi is Thinking..." ])
         setUserInput("")
         setLoading(true)
-        // const base = 'https://nyaysathi.replit.app/';
-        const base = 'http://localhost:5000/'
+        const base = 'https://nyaysathi.replit.app/';
+        // const base = 'http://localhost:5000/'
         if (messages.length === 1) {
             const endpoint = base + 'ask';
             const requestData = {

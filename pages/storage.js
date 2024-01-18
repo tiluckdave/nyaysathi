@@ -52,7 +52,7 @@ export default function Storage() {
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch("http://localhost:3000//upload", {
+        fetch("http://nyaysathi.replit.app/upload", {
             method: "POST",
             body: formData,
         })
@@ -210,7 +210,7 @@ export default function Storage() {
                             className='files-dropzone'
                             onChange={handleChange}
                             onError={handleError}
-                            accepts={[ 'image/png', 'image/jpg', '.pdf']}
+                            accepts={[ 'image/png', 'image/jpg', '.pdf' ]}
                             maxFileSize={100000000}
                             minFileSize={0}
                             clickable>

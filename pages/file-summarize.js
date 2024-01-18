@@ -6,11 +6,11 @@ import { RxCross2 } from "react-icons/rx";
 
 export default function FileSummarize() {
     const audioRef = useRef(null);
-    const [file, setFile] = useState(null);
-    const [summary, setSummary] = useState();
-    const [selectedLanguage, setSelectedLanguage] = useState("english");
-    const [loading, setLoading] = useState(false);
-    const [audio, setAudio] = useState(null)
+    const [ file, setFile ] = useState(null);
+    const [ summary, setSummary ] = useState();
+    const [ selectedLanguage, setSelectedLanguage ] = useState("english");
+    const [ loading, setLoading ] = useState(false);
+    const [ audio, setAudio ] = useState(null)
     const [ isAudioLoaded, setIsAudioLoaded ] = useState(false);
 
     function RemoveFile() {
@@ -19,8 +19,8 @@ export default function FileSummarize() {
     }
 
     const handleChange = (files) => {
-        setFile(files[0]);
-        console.log(files[0]);
+        setFile(files[ 0 ]);
+        console.log(files[ 0 ]);
     }
 
     const handleError = (error, file) => {
@@ -32,14 +32,14 @@ export default function FileSummarize() {
             return;
         }
 
-        setLoading(true); 
+        setLoading(true);
 
         const formData = new FormData();
         formData.append("file", file);
         formData.append("lang", selectedLanguage);
 
-        // fetch("https://nyaysathi.replit.app/summarize", {
-        fetch("http://localhost:5000/summarize", {
+        fetch("https://nyaysathi.replit.app/summarize", {
+            // fetch("http://localhost:5000/summarize", {
             method: "POST",
             body: formData,
         })
@@ -58,22 +58,22 @@ export default function FileSummarize() {
 
     useEffect(() => {
         const audioElement = audioRef.current;
-    
+
         const handleCanPlay = () => {
-          // Audio is ready to play
-          setIsAudioLoaded(true);
-          audioElement.play();
+            // Audio is ready to play
+            setIsAudioLoaded(true);
+            audioElement.play();
         };
-    
+
         if (audioElement) {
-          audioElement.addEventListener('canplay', handleCanPlay);
-    
-          // Cleanup event listener on component unmount
-          return () => {
-            audioElement.removeEventListener('canplay', handleCanPlay);
-          };
+            audioElement.addEventListener('canplay', handleCanPlay);
+
+            // Cleanup event listener on component unmount
+            return () => {
+                audioElement.removeEventListener('canplay', handleCanPlay);
+            };
         }
-      }, []);
+    }, []);
 
     return (
         <DashBoardWrapper page="file">
@@ -93,7 +93,7 @@ export default function FileSummarize() {
                         </Flex>
                         {summary ? (
                             <Flex flexDirection="column" gap={2} padding={6} border={"2px"} borderColor={"gray.200"} rounded={10}>
-                                <Heading size="md" fontWeight="bold" textAlign={{ base: "center", lg: "left" }}>{file.name.split('.')[0]}</Heading>
+                                <Heading size="md" fontWeight="bold" textAlign={{ base: "center", lg: "left" }}>{file.name.split('.')[ 0 ]}</Heading>
                                 <Text fontSize={{ base: "sm", lg: "md" }} textAlign={"justify"} mt={2}>{summary}</Text>
                                 <audio ref={audioRef} controls >
                                     <source src={audio} />
@@ -122,7 +122,7 @@ export default function FileSummarize() {
                     className='files-dropzone'
                     onChange={handleChange}
                     onError={handleError}
-                    accepts={['image/png', 'image/jpg', 'image/jpeg', '.pdf']}
+                    accepts={[ 'image/png', 'image/jpg', 'image/jpeg', '.pdf' ]}
                     maxFileSize={1000000}
                     minFileSize={0}
                     clickable>
