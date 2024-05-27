@@ -6,12 +6,14 @@ import { RxCross2 } from "react-icons/rx";
 
 export default function FileSummarize() {
     const audioRef = useRef(null);
-    const [ file, setFile ] = useState(null);
-    const [ summary, setSummary ] = useState();
-    const [ selectedLanguage, setSelectedLanguage ] = useState("english");
-    const [ loading, setLoading ] = useState(false);
-    const [ audio, setAudio ] = useState(null)
-    const [ isAudioLoaded, setIsAudioLoaded ] = useState(false);
+    const [file, setFile] = useState(null);
+    const [summary, setSummary] = useState();
+    const [selectedLanguage, setSelectedLanguage] = useState("english");
+    const [loading, setLoading] = useState(false);
+    const [audio, setAudio] = useState(null)
+    const [precision, setPrecision] = useState(null);
+    const [ratio, setRatio] = useState(null);
+    const [isAudioLoaded, setIsAudioLoaded] = useState(false);
 
     function RemoveFile() {
         setFile(null);
@@ -19,8 +21,8 @@ export default function FileSummarize() {
     }
 
     const handleChange = (files) => {
-        setFile(files[ 0 ]);
-        console.log(files[ 0 ]);
+        setFile(files[0]);
+        console.log(files[0]);
     }
 
     const handleError = (error, file) => {
@@ -47,6 +49,8 @@ export default function FileSummarize() {
             .then((result) => {
                 setSummary(result.summary);
                 setAudio(result.voice)
+                setPrecision(result.precision)
+                setRatio(result.ratio)
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -93,8 +97,9 @@ export default function FileSummarize() {
                         </Flex>
                         {summary ? (
                             <Flex flexDirection="column" gap={2} padding={6} border={"2px"} borderColor={"gray.200"} rounded={10}>
-                                <Heading size="md" fontWeight="bold" textAlign={{ base: "center", lg: "left" }}>{file.name.split('.')[ 0 ]}</Heading>
+                                <Heading size="md" fontWeight="bold" textAlign={{ base: "center", lg: "left" }}>{file.name.split('.')[0]}</Heading>
                                 <Text fontSize={{ base: "sm", lg: "md" }} textAlign={"justify"} mt={2}>{summary}</Text>
+                                <Text fontSize={"sm"} color={"green"} mt={2}>Precision: {precision} | Original to Summary Ratio: {ratio}</Text>
                                 <audio ref={audioRef} controls >
                                     <source src={audio} />
                                     Your browser does not support the audio element.
@@ -122,7 +127,7 @@ export default function FileSummarize() {
                     className='files-dropzone'
                     onChange={handleChange}
                     onError={handleError}
-                    accepts={[ 'image/png', 'image/jpg', 'image/jpeg', '.pdf' ]}
+                    accepts={['image/png', 'image/jpg', 'image/jpeg', '.pdf']}
                     maxFileSize={1000000}
                     minFileSize={0}
                     clickable>
