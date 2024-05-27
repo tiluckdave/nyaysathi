@@ -99,7 +99,7 @@ export default function FileSummarize() {
                             <Flex flexDirection="column" gap={2} padding={6} border={"2px"} borderColor={"gray.200"} rounded={10}>
                                 <Heading size="md" fontWeight="bold" textAlign={{ base: "center", lg: "left" }}>{file.name.split('.')[0]}</Heading>
                                 <Text fontSize={{ base: "sm", lg: "md" }} textAlign={"justify"} mt={2}>{summary}</Text>
-                                <Text fontSize={"sm"} color={"green"} mt={2}>Precision: {precision} | Original to Summary Ratio: {ratio}</Text>
+                                <Text fontSize={"sm"} color={"green"} mt={2}>Precision: {Math.round(precision * 100)} | Original to Summary Ratio: {Math.round(ratio)}</Text>
                                 <audio ref={audioRef} controls >
                                     <source src={audio} />
                                     Your browser does not support the audio element.
