@@ -53,6 +53,7 @@ export default function Storage() {
         formData.append("file", file);
 
         fetch("http://nyaysathi.replit.app/upload", {
+        // fetch("http://localhost/upload", {
             method: "POST",
             body: formData,
         })

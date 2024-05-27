@@ -29,6 +29,8 @@ export default function AskQuery() {
   const [ sourceDocs, setSourceDocs ] = useState([]);
   const [ lawyers, setLawyers ] = useState([]);
   const [ idk, setIdk ] = useState(false);
+  const [ hit, setHit ] = useState(true);
+  const [ precision, setPrecision ] = useState(0);
   const [ recording, setRecording ] = useState(false);
   const [ recorded, setRecorded ] = useState(false);
   const [ audio, setAudio ] = useState(null);
@@ -52,6 +54,7 @@ export default function AskQuery() {
     formData.append("file", blob);
     try {
       const endpoint = 'https://nyaysathi.replit.app/ask-voice';
+      // const endpoint = "http://localhost/ask-voice";
       const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
@@ -71,6 +74,7 @@ export default function AskQuery() {
       setSpecs(responseData.specs);
       setAudio(responseData.voice);
       setSourceDocs(responseData.docs);
+      setPrecision(responseData.precision);
       console.log(responseData);
       setRecorded(false);
       setRecording(false);
@@ -89,8 +93,8 @@ export default function AskQuery() {
     try {
       setIdk(false);
       setLoading(true);
-      const endpoint = 'https://nyaysathi.replit.app/ask';
-      // const endpoint = "http://localhost:5000/ask";
+      // const endpoint = 'https://nyaysathi.replit.app/ask';
+      const endpoint = "http://127.0.0.1/ask";
       const requestData = {
         question: userInput,
       };
@@ -98,23 +102,21 @@ export default function AskQuery() {
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',  // Ensure this is set correctly
         },
         body: JSON.stringify(requestData),
       });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-      }
 
       const responseData = await response.json();
       console.log(responseData);
 
       if (responseData.answer.includes("I am not sure about this")) {
         setIdk(true);
+        setIdk(false);
       }
 
       setApiOutput(responseData.answer);
+      setPrecision(responseData.precision);
       setSpecs(responseData.specs);
       setAudio(responseData.voice);
       console.log(responseData);
@@ -129,7 +131,8 @@ export default function AskQuery() {
     try {
       setIdk(false);
       setLoading(true);
-      const endpoint = 'https://nyaysathi.vercel.app/reask';
+      // const endpoint = 'https://nyaysathi.replit.app/reask';
+      const endpoint = "http://localhost/reask";
       const requestData = {
         question: userInput,
         response: apiOutput,
@@ -137,6 +140,7 @@ export default function AskQuery() {
       };
 
       const response = await fetch(endpoint, {
+        mode: "no-cors",
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -153,9 +157,11 @@ export default function AskQuery() {
 
       if (responseData.answer.includes("I am not sure about this")) {
         setIdk(true);
+        setHit(false)
       }
 
       setApiOutput(responseData.answer);
+      setPrecision(responseData.precision);
       setAudio(responseData.voice);
       setLoading(false);
     } catch (error) {
@@ -165,12 +171,9 @@ export default function AskQuery() {
 
   useEffect(() => {
     console.log("Specs:", specs);
-    console.log(user);
-    console.log("State:", user?.state);
-    console.log("City:", user?.city);
     const fetchData = async () => {
       try {
-        const resultLawyers = await getLawyer(specs, user?.state, user?.city);
+        const resultLawyers = await getLawyer(specs);
         setLawyers(resultLawyers);
         console.log("Lawyers:", resultLawyers);
       } catch (error) {
@@ -305,10 +308,10 @@ export default function AskQuery() {
         )}
         {!loading && apiOutput && (
           <Flex flexDirection={"column"}>
-            <audio ref={audioRef} controls >
+            {/* <audio ref={audioRef} controls >
               <source src={audio} />
               Your browser does not support the audio element.
-            </audio>
+            </audio> */}
             <Text fontWeight={"bold"}>NyaySathi</Text>
             {!idk && <Text>{apiOutput}</Text>}
             {idk && (
@@ -334,13 +337,23 @@ export default function AskQuery() {
                 </Link>
               </Flex>
             )}
+            {/* make a red note to show Hit true or false and the precision */}
+            {hit ? (
+              <Text color={"green"}>
+                Hit: {hit.toString()} | Precision: {precision}
+              </Text>
+            ) : (
+              <Text color={"red"}>
+                Miss
+              </Text>
+            )}
             {lawyers && (
               <Text mt={10} fontWeight={"bold"}>
                 These are some source files where we found data from, feel free
                 to read them for extra knowledge! case
               </Text>
             )}
-            <Stack direction={{base: "column", lg: "row"}}>
+            <Stack direction={{ base: "column", lg: "row" }}>
               {!idk && sourceDocs.length > 0 && sourceDocs.map((doc) => (
                 <Link key={doc}
                   href={`https://storage.googleapis.com/nyaysathi.appspot.com/${doc}.txt`}
@@ -368,6 +381,7 @@ export default function AskQuery() {
                         {lawyer.name}
                       </Text>
                       <Text color={"gray.500"} fontSize={"xs"}>{lawyer.email} | {lawyer.phone}</Text>
+                      <Text color={"gray.500"} fontSize={"xs"}>Reputation Points - {lawyer.credit}</Text>
                     </Flex>
                   </Flex>
                 ))}

@@ -14,7 +14,7 @@ export default function ChatLegal() {
         setUserInput("")
         setLoading(true)
         const base = 'https://nyaysathi.replit.app/';
-        // const base = 'http://localhost:5000/'
+        // const base = 'http://localhost/'
         if (messages.length === 1) {
             const endpoint = base + 'ask';
             const requestData = {
