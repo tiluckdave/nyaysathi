@@ -22,20 +22,20 @@ import { getLawyer } from "@/lib/db";
 export default function AskQuery() {
   const audioRef = useRef(null);
   const { user } = UserAuth();
-  const [ loading, setLoading ] = useState(false);
-  const [ userInput, setUserInput ] = useState(null);
-  const [ apiOutput, setApiOutput ] = useState("");
-  const [ specs, setSpecs ] = useState([]);
-  const [ sourceDocs, setSourceDocs ] = useState([]);
-  const [ lawyers, setLawyers ] = useState([]);
-  const [ idk, setIdk ] = useState(false);
-  const [ hit, setHit ] = useState(true);
-  const [ precision, setPrecision ] = useState(0);
-  const [ recording, setRecording ] = useState(false);
-  const [ recorded, setRecorded ] = useState(false);
-  const [ audio, setAudio ] = useState(null);
-  const [ blob, setBlob ] = useState(null);
-  const [ isAudioLoaded, setIsAudioLoaded ] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [userInput, setUserInput] = useState(null);
+  const [apiOutput, setApiOutput] = useState("");
+  const [specs, setSpecs] = useState([]);
+  const [sourceDocs, setSourceDocs] = useState([]);
+  const [lawyers, setLawyers] = useState([]);
+  const [idk, setIdk] = useState(false);
+  const [hit, setHit] = useState(true);
+  const [precision, setPrecision] = useState(0);
+  const [recording, setRecording] = useState(false);
+  const [recorded, setRecorded] = useState(false);
+  const [audio, setAudio] = useState(null);
+  const [blob, setBlob] = useState(null);
+  const [isAudioLoaded, setIsAudioLoaded] = useState(false);
   const {
     startRecording,
     stopRecording,
@@ -93,8 +93,8 @@ export default function AskQuery() {
     try {
       setIdk(false);
       setLoading(true);
-      // const endpoint = 'https://nyaysathi.replit.app/ask';
-      const endpoint = "http://127.0.0.1/ask";
+      const endpoint = 'https://nyaysathi.replit.app/ask';
+      // const endpoint = "http://127.0.0.1/ask";
       const requestData = {
         question: userInput,
       };
@@ -131,8 +131,8 @@ export default function AskQuery() {
     try {
       setIdk(false);
       setLoading(true);
-      // const endpoint = 'https://nyaysathi.replit.app/reask';
-      const endpoint = "http://localhost/reask";
+      const endpoint = 'https://nyaysathi.replit.app/reask';
+      // const endpoint = "http://localhost/reask";
       const requestData = {
         question: userInput,
         response: apiOutput,
@@ -182,20 +182,20 @@ export default function AskQuery() {
     };
 
     fetchData();
-  }, [ specs, user ]);
+  }, [specs, user]);
 
   useEffect(() => {
     if (!recordingBlob) return;
     const reader = new FileReader();
     reader.readAsArrayBuffer(recordingBlob);
     reader.onloadend = function () {
-      const wavBlob = new Blob([ reader.result ], { type: 'audio/wav' });
+      const wavBlob = new Blob([reader.result], { type: 'audio/wav' });
       console.log(wavBlob)
       setBlob(wavBlob);
     }
     setRecorded(true)
 
-  }, [ setRecorded, recordingBlob ])
+  }, [setRecorded, recordingBlob])
 
   useEffect(() => {
     const audioElement = audioRef.current;
